@@ -36,13 +36,12 @@
             position: relative; 
         }
         
-        /* Efecto Play al pasar el mouse */
         .tarjeta:hover .placeholder-imagen::after { 
             content: '▶'; 
             font-size: 3rem; 
             color: white; 
             position: absolute; 
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-shadow: 0 0 15px rgba(0,0,0,0.7);
         }
 
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0 0 8px 0; }
@@ -59,7 +58,13 @@
             justify-content: center; 
             align-items: center; 
         }
-        #videoPeli { width: 80%; max-width: 1000px; outline: none; border: 2px solid #333; background: black; }
+        #videoPeli { 
+            width: 90%; 
+            max-width: 1000px; 
+            outline: none; 
+            border: 2px solid #333; 
+            background: #000; 
+        }
         .cerrar { 
             position: absolute; 
             top: 20px; right: 40px; 
@@ -81,14 +86,14 @@
             <svg width="40" viewBox="0 0 24 24" fill="white" style="opacity:0.5"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
         </div>
         <p class="titulo-peli">El Impostor</p>
-        <p class="descripcion-peli">Reproducir estreno desde Archive.org</p>
+        <p class="descripcion-peli">Reproducir estreno FINAL desde Archive.org</p>
     </div>
 
     <!-- El Reproductor -->
     <div id="reproductor">
         <span class="cerrar" onclick="cerrarPeli()">&times;</span>
-        <video id="videoPeli" controls>
-            <!-- NOTA: He cambiado el link a un archivo MP4 real de Archive.org -->
+        <!-- Atributo crossorigin y preload añadidos para evitar bloqueos -->
+        <video id="videoPeli" controls crossorigin="anonymous" preload="auto">
             <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
             Tu navegador no soporta video.
         </video>
@@ -100,21 +105,22 @@
 
         function abrirPeli() {
             modal.style.display = 'flex';
-            video.play();
+            video.load(); // Importante para refrescar la fuente del video
+            video.play().catch(e => console.log("Reproducción automática bloqueada, pulsa Play manualmente."));
         }
 
         function cerrarPeli() {
             modal.style.display = 'none';
             video.pause();
-            video.currentTime = 0; // Reinicia el video al cerrar
+            video.currentTime = 0;
         }
 
-        // Cerrar si se pulsa la tecla Escape
+        // Cerrar con tecla Escape
         window.addEventListener('keydown', (e) => {
             if (e.key === "Escape") cerrarPeli();
         });
 
-        // Cerrar haciendo clic fuera del video
+        // Cerrar haciendo clic en el fondo negro
         modal.addEventListener('click', (e) => {
             if (e.target === modal) cerrarPeli();
         });
