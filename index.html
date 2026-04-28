@@ -8,7 +8,7 @@
         body { 
             background-color: #141414; 
             color: white; 
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            font-family: 'Arial', sans-serif; 
             margin: 0; 
             padding: 40px; 
         }
@@ -17,7 +17,7 @@
         
         .catalogo { display: flex; gap: 30px; flex-wrap: wrap; }
 
-        /* Tarjeta con efecto GLOW */
+        /* Tarjeta con Brillo Rojo */
         .tarjeta { 
             background-color: #181818; 
             border-radius: 4px; 
@@ -25,53 +25,73 @@
             overflow: hidden; 
             transition: all 0.3s ease; 
             cursor: pointer;
-            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        
         .tarjeta:hover { 
             transform: scale(1.05); 
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.4); /* Brillo rojo */
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); 
         }
 
-        /* MemeCraft bloqueada */
+        /* MemeCraft bloqueado */
         .bloqueada { 
             cursor: not-allowed; 
-            filter: grayscale(1) brightness(0.5); 
+            opacity: 0.5; 
+            filter: grayscale(1); 
         }
 
         .contenedor-poster { 
             width: 100%; 
             height: 160px; 
             background-color: #333; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
         }
         .contenedor-poster img { width: 100%; height: 100%; object-fit: cover; }
         
-        .proximamente {
-            position: absolute;
-            border: 2px solid #E50914;
-            color: #E50914;
-            padding: 5px 10px;
-            font-weight: bold;
+        .proximamente { 
+            position: absolute; 
+            border: 2px solid #E50914; 
+            color: #E50914; 
+            padding: 5px 10px; 
+            font-weight: bold; 
+            background: rgba(0,0,0,0.8); 
             text-transform: uppercase;
             font-size: 0.8rem;
-            background: rgba(0,0,0,0.8);
         }
 
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
-        /* Reproductor */
+        /* REPRODUCTOR (Fix para que no salga pequeño) */
         #reproductor { 
-            display: none; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; background: rgba(0,0,0,0.98); 
-            z-index: 1000; justify-content: center; align-items: center; 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
         }
-        video { width: 90%; max-width: 1000px; background: #000; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .cerrar { position: absolute; top: 20px; right: 40px; font-size: 50px; color: white; cursor: pointer; }
+        #videoPeli { 
+            width: 80%; 
+            max-width: 1000px; 
+            height: auto; 
+            aspect-ratio: 16 / 9; /* Mantiene la forma de cine */
+            background: #000; 
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+            outline: none;
+        }
+        .cerrar { 
+            position: absolute; 
+            top: 20px; right: 40px; 
+            font-size: 50px; 
+            color: white; 
+            cursor: pointer; 
+            z-index: 1001; 
+        }
     </style>
 </head>
 <body>
@@ -80,17 +100,18 @@
     <h2>Mis Películas Caseras</h2>
 
     <div class="catalogo">
-        <!-- El Impostor -->
+        <!-- PELÍCULA: EL IMPOSTOR -->
         <div class="tarjeta" onclick="abrirPeli()">
             <div class="contenedor-poster">
-                <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster">
+                <!-- LINK DEL PÓSTER APLICADO -->
+                <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster El Impostor">
             </div>
             <div class="info-peli">
                 <p class="titulo-peli">El_Impostor la película</p>
             </div>
         </div>
 
-        <!-- MemeCraft -->
+        <!-- MEMECRAFT (BLOQUEADO) -->
         <div class="tarjeta bloqueada">
             <div class="contenedor-poster">
                 <span class="proximamente">Próximamente</span>
@@ -102,11 +123,13 @@
         </div>
     </div>
 
+    <!-- REPRODUCTOR -->
     <div id="reproductor">
         <span class="cerrar" onclick="cerrarPeli()">&times;</span>
-        <!-- Eliminado crossorigin para evitar fallos de carga -->
-        <video id="videoPeli" controls preload="metadata">
+        <video id="videoPeli" controls preload="auto">
+            <!-- LINK DE LA PELI APLICADO -->
             <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
+            Tu navegador no soporta video.
         </video>
     </div>
 
@@ -116,17 +139,25 @@
 
         function abrirPeli() {
             modal.style.display = 'flex';
-            video.load(); 
-            video.play().catch(() => {
-                console.log("Esperando clic del usuario para reproducir");
-            });
+            video.load(); // Carga el video desde el principio
+            
+            // Intenta reproducir automáticamente
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("El navegador bloqueó el autoplay. Pulsa Play manualmente.");
+                });
+            }
         }
 
         function cerrarPeli() {
             modal.style.display = 'none';
             video.pause();
+            video.currentTime = 0;
         }
 
+        // Cerrar con Escape o clic fuera
+        window.addEventListener('keydown', (e) => { if (e.key === "Escape") cerrarPeli(); });
         modal.addEventListener('click', (e) => { if (e.target === modal) cerrarPeli(); });
     </script>
 </body>
