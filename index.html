@@ -5,56 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ñotflix - El Impostor</title>
     <style>
-        body { background-color: #141414; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px; }
-        h1 { color: #E50914; font-size: 2.5rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px; }
-        h2 { font-size: 1.2rem; color: #fff; margin-bottom: 30px; font-weight: normal; }
-        
-        .tarjeta { 
-            background-color: #2F2F2F; 
-            border-radius: 8px; 
-            width: 250px; 
-            padding: 0; /* Quitamos padding para que la imagen ocupe todo */
-            overflow: hidden;
-            transition: transform 0.3s; 
-            cursor: pointer; 
+        body { 
+            background-color: #141414; 
+            color: white; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 40px; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
-        .tarjeta:hover { transform: scale(1.05); }
+        h1 { color: #E50914; font-size: 3rem; margin: 0; text-transform: uppercase; letter-spacing: 4px; font-weight: bold; }
+        h2 { font-size: 1.2rem; color: #E5E5E5; margin-bottom: 40px; font-weight: 300; }
+        
+        /* Estilo de la Tarjeta */
+        .tarjeta { 
+            background-color: #181818; 
+            border-radius: 4px; 
+            width: 280px; 
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s; 
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .tarjeta:hover { 
+            transform: scale(1.08); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+        }
         
         .contenedor-poster { 
             width: 100%; 
-            height: 150px; 
+            height: 160px; 
             position: relative; 
-            background-color: #404040;
+            background-color: #333;
         }
         
         .contenedor-poster img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ajusta la imagen sin deformarla */
+            object-fit: cover;
         }
         
+        /* Icono Play al hacer Hover */
         .tarjeta:hover .contenedor-poster::after { 
             content: '▶'; 
-            font-size: 3rem; 
+            font-size: 3.5rem; 
             color: white; 
             position: absolute; 
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            text-shadow: 0 0 15px rgba(0,0,0,0.8);
+            text-shadow: 0 0 20px rgba(0,0,0,0.9);
+            z-index: 2;
         }
 
         .info-peli { padding: 15px; }
-        .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0 0 5px 0; }
-        .descripcion-peli { font-size: 0.85rem; color: #A3A3A3; margin: 0; }
+        .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0 0 5px 0; color: #fff; }
+        .descripcion-peli { font-size: 0.85rem; color: #A3A3A3; margin: 0; line-height: 1.4; }
 
+        /* Reproductor Modal Fullscreen */
         #reproductor { 
-            display: none; position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background-color: rgba(0,0,0,0.95); z-index: 1000; 
-            justify-content: center; align-items: center; 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.98); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
         }
-        #videoPeli { width: 90%; max-width: 1000px; background: #000; }
-        .cerrar { position: absolute; top: 20px; right: 40px; font-size: 50px; color: white; cursor: pointer; z-index: 1001; }
+        #videoPeli { 
+            width: 90%; 
+            max-width: 1100px; 
+            border: 1px solid #333;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+        .cerrar { 
+            position: absolute; 
+            top: 30px; right: 40px; 
+            font-size: 40px; 
+            color: #fff; 
+            cursor: pointer; 
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .cerrar:hover { opacity: 1; }
     </style>
 </head>
 <body>
@@ -64,19 +98,21 @@
 
     <div class="tarjeta" onclick="abrirPeli()">
         <div class="contenedor-poster">
-            <!-- REEMPLAZA ESTA URL CON TU PÓSTER -->
-            <img src="https://archive.org" alt="Póster">
+            <!-- Tu link de póster aplicado aquí -->
+            <img src="https://archive.org/download/poster_20260428/poster.png" alt="Póster de El Impostor">
         </div>
         <div class="info-peli">
             <p class="titulo-peli">El Impostor</p>
-            <p class="descripcion-peli">Película Completa - HD</p>
+            <p class="descripcion-peli">Una producción original de mi casa. Estreno mundial.</p>
         </div>
     </div>
 
+    <!-- El Reproductor -->
     <div id="reproductor">
         <span class="cerrar" onclick="cerrarPeli()">&times;</span>
         <video id="videoPeli" controls crossorigin="anonymous">
             <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
+            Tu navegador no soporta video.
         </video>
     </div>
 
@@ -87,16 +123,24 @@
         function abrirPeli() {
             modal.style.display = 'flex';
             video.load();
-            video.play();
+            video.play().catch(e => console.log("Play manual requerido"));
         }
 
         function cerrarPeli() {
             modal.style.display = 'none';
             video.pause();
+            video.currentTime = 0;
         }
 
-        window.addEventListener('keydown', (e) => { if (e.key === "Escape") cerrarPeli(); });
-        modal.addEventListener('click', (e) => { if (e.target === modal) cerrarPeli(); });
+        // Controles de teclado
+        window.addEventListener('keydown', (e) => { 
+            if (e.key === "Escape") cerrarPeli(); 
+        });
+
+        // Cerrar al hacer clic fuera del cuadro de video
+        modal.addEventListener('click', (e) => { 
+            if (e.target === modal) cerrarPeli(); 
+        });
     </script>
 </body>
 </html>
