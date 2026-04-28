@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ñotflix - El Impostor</title>
     <style>
-        body { background-color: #141414; color: white; font-family: Arial, sans-serif; margin: 0; padding: 40px; }
-        h1 { color: #E50914; font-size: 3rem; margin: 0; letter-spacing: 4px; }
-        h2 { font-size: 1.2rem; color: #E5E5E5; margin-bottom: 40px; }
+        body { background-color: #141414; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px; }
+        h1 { color: #E50914; font-size: 3rem; margin: 0; letter-spacing: 4px; font-weight: bold; }
+        h2 { font-size: 1.2rem; color: #E5E5E5; margin-bottom: 40px; font-weight: 300; }
         
         .tarjeta { 
             background-color: #181818; border-radius: 4px; width: 280px; 
@@ -18,7 +18,6 @@
         .contenedor-poster { width: 100%; height: 160px; background-color: #333; position: relative; }
         .contenedor-poster img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Icono Play */
         .tarjeta:hover .contenedor-poster::after { 
             content: '▶'; font-size: 3rem; color: white; position: absolute; 
             top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -27,13 +26,12 @@
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
-        /* Modal */
         #reproductor { 
             display: none; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; background: black; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95); 
             z-index: 1000; justify-content: center; align-items: center; 
         }
-        video { width: 90%; max-width: 1000px; outline: none; }
+        #videoPeli { width: 90%; max-width: 1000px; background: black; outline: none; }
         .cerrar { position: absolute; top: 20px; right: 40px; font-size: 50px; color: white; cursor: pointer; }
     </style>
 </head>
@@ -44,17 +42,17 @@
 
     <div class="tarjeta" onclick="abrirPeli()">
         <div class="contenedor-poster">
-            <!-- Enlace alternativo de imagen de Archive -->
-            <img src="https://archive.org/download/poster_20260428/poster.png" onerror="this.src='https://archive.org'" alt="Poster">
+            <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster">
         </div>
         <div class="info-peli">
-            <p class="titulo-peli">El Impostor</p>
+            <p class="titulo-peli">El_Impostor la película</p>
         </div>
     </div>
 
     <div id="reproductor">
         <span class="cerrar" onclick="cerrarPeli()">&times;</span>
-        <video id="videoPeli" controls>
+        <!-- Atributos de carga forzada y bypass de seguridad -->
+        <video id="videoPeli" controls preload="auto" crossorigin="anonymous">
             <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
             Tu navegador no soporta video.
         </video>
@@ -66,8 +64,18 @@
 
         function abrirPeli() {
             modal.style.display = 'flex';
-            video.load(); // Fuerza al navegador a leer el link de nuevo
-            video.play().catch(e => console.log("Error al reproducir: ", e));
+            // 1. Limpiamos cualquier error previo
+            video.pause();
+            // 2. Forzamos la carga del enlace codificado
+            video.load(); 
+            // 3. Intentamos reproducir con una promesa para evitar bloqueos del navegador
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("El navegador requiere que hagas clic en Play manualmente.");
+                });
+            }
         }
 
         function cerrarPeli() {
@@ -76,6 +84,8 @@
             video.currentTime = 0;
         }
 
+        // Cerrar al pulsar Escape o clic fuera
+        window.addEventListener('keydown', (e) => { if (e.key === "Escape") cerrarPeli(); });
         modal.addEventListener('click', (e) => { if (e.target === modal) cerrarPeli(); });
     </script>
 </body>
