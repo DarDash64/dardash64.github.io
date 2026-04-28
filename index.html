@@ -5,27 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ñotflix - El Impostor</title>
     <style>
-        body { background-color: #141414; color: white; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px; }
+        body { 
+            background-color: #141414; 
+            color: white; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 40px; 
+        }
         h1 { color: #E50914; font-size: 3rem; margin: 0; letter-spacing: 4px; font-weight: bold; }
         h2 { font-size: 1.2rem; color: #E5E5E5; margin-bottom: 40px; font-weight: 300; }
         
+        /* Contenedor de las tarjetas */
+        .catalogo {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* Estilo base de las tarjetas */
         .tarjeta { 
-            background-color: #181818; border-radius: 4px; width: 280px; 
-            overflow: hidden; transition: transform 0.3s; cursor: pointer;
+            background-color: #181818; 
+            border-radius: 4px; 
+            width: 280px; 
+            overflow: hidden; 
+            transition: transform 0.3s; 
+            cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
         .tarjeta:hover { transform: scale(1.05); }
-        .contenedor-poster { width: 100%; height: 160px; background-color: #333; position: relative; }
+
+        /* Tarjeta bloqueada (MemeCraft) */
+        .tarjeta.bloqueada {
+            cursor: not-allowed;
+            opacity: 0.6;
+            filter: grayscale(0.8);
+        }
+        .tarjeta.bloqueada:hover { transform: none; }
+
+        .contenedor-poster { 
+            width: 100%; 
+            height: 160px; 
+            background-color: #333; 
+            position: relative; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .contenedor-poster img { width: 100%; height: 100%; object-fit: cover; }
         
-        .tarjeta:hover .contenedor-poster::after { 
+        /* Play solo en la que funciona */
+        .tarjeta:not(.bloqueada):hover .contenedor-poster::after { 
             content: '▶'; font-size: 3rem; color: white; position: absolute; 
             top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-shadow: 0 0 15px rgba(0,0,0,1);
+        }
+
+        /* Texto Próximamente */
+        .proximamente-overlay {
+            position: absolute;
+            background: rgba(0,0,0,0.7);
+            color: #E50914;
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 2px solid #E50914;
+            text-transform: uppercase;
         }
 
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
+        /* Modal */
         #reproductor { 
             display: none; position: fixed; top: 0; left: 0; 
             width: 100%; height: 100%; background: rgba(0,0,0,0.95); 
@@ -40,18 +89,33 @@
     <h1>ÑOTFLIX</h1>
     <h2>Mis Películas Caseras</h2>
 
-    <div class="tarjeta" onclick="abrirPeli()">
-        <div class="contenedor-poster">
-            <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster">
+    <div class="catalogo">
+        <!-- Película 1: El Impostor -->
+        <div class="tarjeta" onclick="abrirPeli()">
+            <div class="contenedor-poster">
+                <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster">
+            </div>
+            <div class="info-peli">
+                <p class="titulo-peli">El_Impostor la película</p>
+            </div>
         </div>
-        <div class="info-peli">
-            <p class="titulo-peli">El_Impostor la película</p>
+
+        <!-- Película 2: MemeCraft (Bloqueada) -->
+        <div class="tarjeta bloqueada">
+            <div class="contenedor-poster">
+                <div class="proximamente-overlay">Próximamente</div>
+                <!-- Imagen de relleno o fondo gris -->
+                <div style="font-size: 50px;">⛏️</div>
+            </div>
+            <div class="info-peli">
+                <p class="titulo-peli">MemeCraft</p>
+            </div>
         </div>
     </div>
 
+    <!-- Reproductor -->
     <div id="reproductor">
         <span class="cerrar" onclick="cerrarPeli()">&times;</span>
-        <!-- Atributos de carga forzada y bypass de seguridad -->
         <video id="videoPeli" controls preload="auto" crossorigin="anonymous">
             <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
             Tu navegador no soporta video.
@@ -64,17 +128,10 @@
 
         function abrirPeli() {
             modal.style.display = 'flex';
-            // 1. Limpiamos cualquier error previo
-            video.pause();
-            // 2. Forzamos la carga del enlace codificado
             video.load(); 
-            // 3. Intentamos reproducir con una promesa para evitar bloqueos del navegador
             const playPromise = video.play();
-            
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("El navegador requiere que hagas clic en Play manualmente.");
-                });
+                playPromise.catch(error => { console.log("Clic manual necesario"); });
             }
         }
 
@@ -84,7 +141,6 @@
             video.currentTime = 0;
         }
 
-        // Cerrar al pulsar Escape o clic fuera
         window.addEventListener('keydown', (e) => { if (e.key === "Escape") cerrarPeli(); });
         modal.addEventListener('click', (e) => { if (e.target === modal) cerrarPeli(); });
     </script>
