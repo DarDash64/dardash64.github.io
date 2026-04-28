@@ -17,7 +17,7 @@
         
         .catalogo { display: flex; gap: 30px; flex-wrap: wrap; }
 
-        /* Tarjeta con Brillo Rojo */
+        /* Tarjetas */
         .tarjeta { 
             background-color: #181818; 
             border-radius: 4px; 
@@ -32,11 +32,15 @@
             box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); 
         }
 
-        /* MemeCraft bloqueado */
+        /* Estilo para items que no existen aún */
         .bloqueada { 
             cursor: not-allowed; 
-            opacity: 0.5; 
-            filter: grayscale(1); 
+            opacity: 0.6; 
+            filter: grayscale(0.5); 
+        }
+        .bloqueada:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         .contenedor-poster { 
@@ -59,12 +63,13 @@
             background: rgba(0,0,0,0.8); 
             text-transform: uppercase;
             font-size: 0.8rem;
+            z-index: 2;
         }
 
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
-        /* REPRODUCTOR (Fix para que no salga pequeño) */
+        /* REPRODUCTOR */
         #reproductor { 
             display: none; 
             position: fixed; 
@@ -79,10 +84,9 @@
             width: 80%; 
             max-width: 1000px; 
             height: auto; 
-            aspect-ratio: 16 / 9; /* Mantiene la forma de cine */
+            aspect-ratio: 16 / 9; 
             background: #000; 
             box-shadow: 0 0 50px rgba(0,0,0,1);
-            outline: none;
         }
         .cerrar { 
             position: absolute; 
@@ -100,10 +104,9 @@
     <h2>Mis Películas Caseras</h2>
 
     <div class="catalogo">
-        <!-- PELÍCULA: EL IMPOSTOR -->
+        <!-- PELÍCULA 1: EL IMPOSTOR -->
         <div class="tarjeta" onclick="abrirPeli()">
             <div class="contenedor-poster">
-                <!-- LINK DEL PÓSTER APLICADO -->
                 <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster El Impostor">
             </div>
             <div class="info-peli">
@@ -111,7 +114,18 @@
             </div>
         </div>
 
-        <!-- MEMECRAFT (BLOQUEADO) -->
+        <!-- PELÍCULA 2: EL IMPOSTOR 2 (PRÓXIMAMENTE) -->
+        <div class="tarjeta bloqueada">
+            <div class="contenedor-poster">
+                <span class="proximamente">Próximamente</span>
+                <img src="https://archive.org/download/poster2_202604/poster2.png" alt="Poster El Impostor 2">
+            </div>
+            <div class="info-peli">
+                <p class="titulo-peli">El_Impostor 2 la película</p>
+            </div>
+        </div>
+
+        <!-- EXTRAS: MEMECRAFT (BLOQUEADO) -->
         <div class="tarjeta bloqueada">
             <div class="contenedor-poster">
                 <span class="proximamente">Próximamente</span>
@@ -127,7 +141,6 @@
     <div id="reproductor">
         <span class="cerrar" onclick="cerrarPeli()">&times;</span>
         <video id="videoPeli" controls preload="auto">
-            <!-- LINK DE LA PELI APLICADO -->
             <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
             Tu navegador no soporta video.
         </video>
@@ -139,15 +152,8 @@
 
         function abrirPeli() {
             modal.style.display = 'flex';
-            video.load(); // Carga el video desde el principio
-            
-            // Intenta reproducir automáticamente
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("El navegador bloqueó el autoplay. Pulsa Play manualmente.");
-                });
-            }
+            video.load(); 
+            video.play().catch(e => console.log("Play manual necesario"));
         }
 
         function cerrarPeli() {
@@ -156,7 +162,6 @@
             video.currentTime = 0;
         }
 
-        // Cerrar con Escape o clic fuera
         window.addEventListener('keydown', (e) => { if (e.key === "Escape") cerrarPeli(); });
         modal.addEventListener('click', (e) => { if (e.target === modal) cerrarPeli(); });
     </script>
