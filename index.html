@@ -6,71 +6,114 @@
 <title>Ñotflix</title>
 
 <style>
-body { background:#141414; color:white; font-family:Arial; margin:0; padding:40px; }
+body { 
+    background-color: #141414; 
+    color: white; 
+    font-family: Arial; 
+    margin: 0; 
+    padding: 40px; 
+}
 h1 { color:#E50914; font-size:3rem; letter-spacing:4px; }
 h2 { color:#E5E5E5; }
 
 .catalogo { display:flex; gap:30px; flex-wrap:wrap; }
 
-.tarjeta {
-    background:#181818;
-    border-radius:4px;
-    width:280px;
-    overflow:hidden;
+/* TARJETAS (NO TOCAR) */
+.tarjeta { 
+    background:#181818; 
+    border-radius:4px; 
+    width:280px; 
+    overflow:hidden; 
+    transition:all 0.3s ease; 
     cursor:pointer;
 }
+.tarjeta:hover { 
+    transform:scale(1.05); 
+    box-shadow:0 0 20px rgba(229,9,20,0.6); 
+}
 
-.bloqueada { opacity:0.6; filter:grayscale(0.5); cursor:not-allowed; }
+.bloqueada { 
+    cursor:not-allowed; 
+    opacity:0.6; 
+    filter:grayscale(0.5); 
+}
+.bloqueada:hover { transform:none; box-shadow:none; }
 
-.contenedor-poster { height:160px; background:#333; display:flex; align-items:center; justify-content:center; }
+.contenedor-poster { 
+    height:160px; 
+    background:#333; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+}
 .contenedor-poster img { width:100%; height:100%; object-fit:cover; }
 
 .info-peli { padding:15px; }
 
-/* MENÚ PRINCIPAL */
-#menuPeli, #menuSaga {
+/* ===== MENÚ TIPO NETFLIX ===== */
+.overlay {
     display:none;
     position:fixed;
     top:0; left:0;
     width:100%; height:100%;
     background:rgba(0,0,0,0.95);
-    z-index:1100;
+    z-index:2000;
     justify-content:center;
     align-items:center;
     flex-direction:column;
+    animation:fadeIn 0.3s;
 }
 
-button {
-    margin:10px;
+@keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+}
+
+.menu-box {
+    text-align:center;
+}
+
+.menu-box button {
+    display:block;
+    margin:10px auto;
     padding:12px 25px;
     border:none;
+    border-radius:4px;
     cursor:pointer;
+    font-size:1rem;
 }
 
-.play-btn { background:white; color:black; }
+.play-btn { background:white; color:black; font-weight:bold; }
 .extra-btn { background:rgba(255,255,255,0.2); color:white; }
 
 .cerrar {
     position:absolute;
-    top:20px; right:40px;
+    top:20px;
+    right:40px;
     font-size:50px;
     cursor:pointer;
 }
 
-/* REPRODUCTOR */
-#reproductor {
-    display:none;
-    position:fixed;
-    width:100%; height:100%;
-    background:black;
-    justify-content:center;
-    align-items:center;
+/* REPRODUCTOR (NO TOCAR) */
+#reproductor { 
+    display:none; 
+    position:fixed; 
+    top:0; left:0; 
+    width:100%; height:100%; 
+    background:rgba(0,0,0,0.95); 
+    z-index:1000; 
+    justify-content:center; 
+    align-items:center; 
 }
 
-video { width:80%; }
+#videoPeli { 
+    width:80%; 
+    max-width:1000px; 
+    aspect-ratio:16/9; 
+}
 
-/* CATÁLOGO DENTRO DE SAGA */
-.saga-catalogo {
+/* SAGA GRID */
+.saga-grid {
     display:flex;
     gap:20px;
 }
@@ -102,19 +145,22 @@ video { width:80%; }
     </div>
 </div>
 
-<!-- MENÚ PRINCIPAL -->
-<div id="menuPeli">
-    <span class="cerrar" onclick="cerrarMenu()">&times;</span>
-    <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
-    <button class="extra-btn" onclick="abrirSaga()">Más de esta saga</button>
+<!-- MENU PRINCIPAL -->
+<div id="menuPrincipal" class="overlay">
+    <span class="cerrar" onclick="cerrarTodo()">&times;</span>
+    <div class="menu-box">
+        <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
+        <button class="extra-btn" onclick="abrirSaga()">Más de esta saga</button>
+        <button class="extra-btn">Añadir a mi lista</button>
+    </div>
 </div>
 
-<!-- MENÚ SAGA -->
-<div id="menuSaga">
-    <span class="cerrar" onclick="cerrarSaga()">&times;</span>
+<!-- MENU SAGA -->
+<div id="menuSaga" class="overlay">
+    <span class="cerrar" onclick="cerrarTodo()">&times;</span>
     <h2>El Impostor - Saga</h2>
 
-    <div class="saga-catalogo">
+    <div class="saga-grid">
         <div class="tarjeta" onclick="reproducir()">
             <div class="contenedor-poster">
                 <img src="https://archive.org/download/poster_20260428/poster.png">
@@ -140,32 +186,35 @@ video { width:80%; }
 </div>
 
 <script>
-const menu = document.getElementById('menuPeli');
+const menu = document.getElementById('menuPrincipal');
 const saga = document.getElementById('menuSaga');
 const modal = document.getElementById('reproductor');
 const video = document.getElementById('videoPeli');
 
-function abrirMenu() { menu.style.display='flex'; }
-function cerrarMenu() { menu.style.display='none'; }
-
-function abrirSaga() {
-    cerrarMenu();
-    saga.style.display='flex';
+function abrirMenu() {
+    menu.style.display = 'flex';
 }
 
-function cerrarSaga() { saga.style.display='none'; }
+function abrirSaga() {
+    menu.style.display = 'none';
+    saga.style.display = 'flex';
+}
+
+function cerrarTodo() {
+    menu.style.display = 'none';
+    saga.style.display = 'none';
+}
 
 function reproducir() {
-    cerrarMenu();
-    cerrarSaga();
-    modal.style.display='flex';
+    cerrarTodo();
+    modal.style.display = 'flex';
     video.play();
 }
 
 function cerrarPeli() {
-    modal.style.display='none';
+    modal.style.display = 'none';
     video.pause();
-    video.currentTime=0;
+    video.currentTime = 0;
 }
 </script>
 
