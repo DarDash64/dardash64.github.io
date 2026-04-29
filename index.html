@@ -1,138 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ñotflix</title>
-    <style>
-        body { 
-            background-color: #141414; 
-            color: white; 
-            font-family: 'Arial', sans-serif; 
-            margin: 0; 
-            padding: 40px; 
-        }
-        h1 { color: #E50914; font-size: 3rem; margin: 0; letter-spacing: 4px; font-weight: bold; }
-        h2 { font-size: 1.2rem; color: #E5E5E5; margin-bottom: 40px; font-weight: 300; }
-        
-        .catalogo { display: flex; gap: 30px; flex-wrap: wrap; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ñotflix</title>
 
-        .tarjeta { 
-            background-color: #181818; 
-            border-radius: 4px; 
-            width: 280px; 
-            overflow: hidden; 
-            transition: all 0.3s ease; 
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-        .tarjeta:hover { 
-            transform: scale(1.05); 
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); 
-        }
+<style>
+body { background:#141414; color:white; font-family:Arial; margin:0; padding:40px; }
+h1 { color:#E50914; font-size:3rem; letter-spacing:4px; }
+h2 { color:#E5E5E5; }
 
-        .bloqueada { 
-            cursor: not-allowed; 
-            opacity: 0.6; 
-            filter: grayscale(0.5); 
-        }
-        .bloqueada:hover {
-            transform: none;
-            box-shadow: none;
-        }
+.catalogo { display:flex; gap:30px; flex-wrap:wrap; }
 
-        .contenedor-poster { 
-            width: 100%; 
-            height: 160px; 
-            background-color: #333; 
-            position: relative; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-        .contenedor-poster img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .proximamente { 
-            position: absolute; 
-            border: 2px solid #E50914; 
-            color: #E50914; 
-            padding: 5px 10px; 
-            font-weight: bold; 
-            background: rgba(0,0,0,0.8); 
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            z-index: 2;
-        }
+.tarjeta {
+    background:#181818;
+    border-radius:4px;
+    width:280px;
+    overflow:hidden;
+    cursor:pointer;
+}
 
-        .info-peli { padding: 15px; }
-        .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
+.bloqueada { opacity:0.6; filter:grayscale(0.5); cursor:not-allowed; }
 
-        /* ===== MENÚ TIPO NETFLIX ===== */
-        #menuPeli {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1100;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+.contenedor-poster { height:160px; background:#333; display:flex; align-items:center; justify-content:center; }
+.contenedor-poster img { width:100%; height:100%; object-fit:cover; }
 
-        .menu-contenido {
-            text-align: center;
-        }
+.info-peli { padding:15px; }
 
-        .menu-contenido button {
-            display: block;
-            margin: 10px auto;
-            padding: 12px 25px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+/* MENÚ PRINCIPAL */
+#menuPeli, #menuSaga {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.95);
+    z-index:1100;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
 
-        .play-btn {
-            background-color: white;
-            color: black;
-            font-weight: bold;
-        }
+button {
+    margin:10px;
+    padding:12px 25px;
+    border:none;
+    cursor:pointer;
+}
 
-        .extra-btn {
-            background-color: rgba(255,255,255,0.2);
-            color: white;
-        }
+.play-btn { background:white; color:black; }
+.extra-btn { background:rgba(255,255,255,0.2); color:white; }
 
-        /* REPRODUCTOR */
-        #reproductor { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); 
-            z-index: 1000; 
-            justify-content: center; 
-            align-items: center; 
-        }
+.cerrar {
+    position:absolute;
+    top:20px; right:40px;
+    font-size:50px;
+    cursor:pointer;
+}
 
-        #videoPeli { 
-            width: 80%; 
-            max-width: 1000px; 
-            aspect-ratio: 16 / 9; 
-            background: #000; 
-        }
+/* REPRODUCTOR */
+#reproductor {
+    display:none;
+    position:fixed;
+    width:100%; height:100%;
+    background:black;
+    justify-content:center;
+    align-items:center;
+}
 
-        .cerrar { 
-            position: absolute; 
-            top: 20px; right: 40px; 
-            font-size: 50px; 
-            color: white; 
-            cursor: pointer; 
-        }
-    </style>
+video { width:80%; }
+
+/* CATÁLOGO DENTRO DE SAGA */
+.saga-catalogo {
+    display:flex;
+    gap:20px;
+}
+</style>
 </head>
+
 <body>
 
 <h1>ÑOTFLIX</h1>
@@ -144,28 +88,46 @@
             <img src="https://archive.org/download/poster_20260428/poster.png">
         </div>
         <div class="info-peli">
-            <p class="titulo-peli">El_Impostor la película</p>
+            El_Impostor la película
         </div>
     </div>
 
     <div class="tarjeta bloqueada">
         <div class="contenedor-poster">
-            <span class="proximamente">Próximamente</span>
             <img src="https://archive.org/download/poster2_202604/poster2.png">
         </div>
         <div class="info-peli">
-            <p class="titulo-peli">El_Impostor 2 la película</p>
+            El_Impostor 2 la película
         </div>
     </div>
 </div>
 
-<!-- MENÚ -->
+<!-- MENÚ PRINCIPAL -->
 <div id="menuPeli">
     <span class="cerrar" onclick="cerrarMenu()">&times;</span>
-    <div class="menu-contenido">
-        <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
-        <button class="extra-btn">Más de esta saga</button>
-        <button class="extra-btn">Añadir a mi lista</button>
+    <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
+    <button class="extra-btn" onclick="abrirSaga()">Más de esta saga</button>
+</div>
+
+<!-- MENÚ SAGA -->
+<div id="menuSaga">
+    <span class="cerrar" onclick="cerrarSaga()">&times;</span>
+    <h2>El Impostor - Saga</h2>
+
+    <div class="saga-catalogo">
+        <div class="tarjeta" onclick="reproducir()">
+            <div class="contenedor-poster">
+                <img src="https://archive.org/download/poster_20260428/poster.png">
+            </div>
+            <div class="info-peli">El_Impostor 1</div>
+        </div>
+
+        <div class="tarjeta bloqueada">
+            <div class="contenedor-poster">
+                <img src="https://archive.org/download/poster2_202604/poster2.png">
+            </div>
+            <div class="info-peli">El_Impostor 2</div>
+        </div>
     </div>
 </div>
 
@@ -178,32 +140,32 @@
 </div>
 
 <script>
+const menu = document.getElementById('menuPeli');
+const saga = document.getElementById('menuSaga');
 const modal = document.getElementById('reproductor');
 const video = document.getElementById('videoPeli');
-const menu = document.getElementById('menuPeli');
 
-function abrirMenu() {
-    menu.style.display = 'flex';
+function abrirMenu() { menu.style.display='flex'; }
+function cerrarMenu() { menu.style.display='none'; }
+
+function abrirSaga() {
+    cerrarMenu();
+    saga.style.display='flex';
 }
 
-function cerrarMenu() {
-    menu.style.display = 'none';
-}
+function cerrarSaga() { saga.style.display='none'; }
 
 function reproducir() {
     cerrarMenu();
-    abrirPeli();
-}
-
-function abrirPeli() {
-    modal.style.display = 'flex';
+    cerrarSaga();
+    modal.style.display='flex';
     video.play();
 }
 
 function cerrarPeli() {
-    modal.style.display = 'none';
+    modal.style.display='none';
     video.pause();
-    video.currentTime = 0;
+    video.currentTime=0;
 }
 </script>
 
