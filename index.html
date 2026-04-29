@@ -6,116 +6,104 @@
 <title>Ñotflix</title>
 
 <style>
-body { 
-    background-color: #141414; 
-    color: white; 
-    font-family: Arial; 
-    margin: 0; 
-    padding: 40px; 
-}
+body { background:#141414; color:white; font-family:Arial; padding:40px; }
 h1 { color:#E50914; font-size:3rem; letter-spacing:4px; }
 h2 { color:#E5E5E5; }
 
 .catalogo { display:flex; gap:30px; flex-wrap:wrap; }
 
-/* TARJETAS (NO TOCAR) */
-.tarjeta { 
-    background:#181818; 
-    border-radius:4px; 
-    width:280px; 
-    overflow:hidden; 
-    transition:all 0.3s ease; 
+/* TARJETA */
+.tarjeta {
+    position:relative;
+    background:#181818;
+    width:280px;
+    border-radius:4px;
+    overflow:hidden;
+    transition:0.3s;
+}
+
+.tarjeta:hover {
+    transform:scale(1.1);
+    z-index:10;
+}
+
+/* POSTER */
+.contenedor-poster img {
+    width:100%;
+    height:160px;
+    object-fit:cover;
+}
+
+/* OVERLAY HOVER */
+.hover-info {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(to top, black, transparent);
+    opacity:0;
+    transition:0.3s;
+    padding:10px;
+}
+
+.tarjeta:hover .hover-info {
+    opacity:1;
+}
+
+/* BOTONES */
+.botones {
+    display:flex;
+    gap:10px;
+}
+
+.btn {
+    padding:8px 12px;
+    border:none;
     cursor:pointer;
-}
-.tarjeta:hover { 
-    transform:scale(1.05); 
-    box-shadow:0 0 20px rgba(229,9,20,0.6); 
+    border-radius:4px;
 }
 
-.bloqueada { 
-    cursor:not-allowed; 
-    opacity:0.6; 
-    filter:grayscale(0.5); 
-}
-.bloqueada:hover { transform:none; box-shadow:none; }
+.play { background:white; color:black; }
+.lista { background:rgba(255,255,255,0.2); color:white; }
 
-.contenedor-poster { 
-    height:160px; 
-    background:#333; 
-    display:flex; 
-    align-items:center; 
-    justify-content:center; 
-}
-.contenedor-poster img { width:100%; height:100%; object-fit:cover; }
+/* BLOQUEADA */
+.bloqueada { opacity:0.6; filter:grayscale(1); pointer-events:none; }
 
-.info-peli { padding:15px; }
-
-/* ===== MENÚ TIPO NETFLIX ===== */
+/* MENÚ */
 .overlay {
     display:none;
     position:fixed;
-    top:0; left:0;
     width:100%; height:100%;
     background:rgba(0,0,0,0.95);
-    z-index:2000;
+    top:0; left:0;
     justify-content:center;
     align-items:center;
     flex-direction:column;
-    animation:fadeIn 0.3s;
+    z-index:1000;
 }
 
-@keyframes fadeIn {
-    from { opacity:0; }
-    to { opacity:1; }
+/* VIDEO */
+#reproductor {
+    display:none;
+    position:fixed;
+    width:100%; height:100%;
+    background:black;
+    justify-content:center;
+    align-items:center;
 }
 
-.menu-box {
-    text-align:center;
-}
-
-.menu-box button {
-    display:block;
-    margin:10px auto;
-    padding:12px 25px;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-    font-size:1rem;
-}
-
-.play-btn { background:white; color:black; font-weight:bold; }
-.extra-btn { background:rgba(255,255,255,0.2); color:white; }
+video { width:80%; }
 
 .cerrar {
     position:absolute;
     top:20px;
     right:40px;
-    font-size:50px;
+    font-size:40px;
     cursor:pointer;
 }
 
-/* REPRODUCTOR (NO TOCAR) */
-#reproductor { 
-    display:none; 
-    position:fixed; 
-    top:0; left:0; 
-    width:100%; height:100%; 
-    background:rgba(0,0,0,0.95); 
-    z-index:1000; 
-    justify-content:center; 
-    align-items:center; 
-}
-
-#videoPeli { 
-    width:80%; 
-    max-width:1000px; 
-    aspect-ratio:16/9; 
-}
-
-/* SAGA GRID */
-.saga-grid {
-    display:flex;
-    gap:20px;
+/* MARCADO EN LISTA */
+.en-lista {
+    background:green !important;
 }
 </style>
 </head>
@@ -126,96 +114,122 @@ h2 { color:#E5E5E5; }
 <h2>Películas</h2>
 
 <div class="catalogo">
-    <div class="tarjeta" onclick="abrirMenu()">
-        <div class="contenedor-poster">
-            <img src="https://archive.org/download/poster_20260428/poster.png">
-        </div>
-        <div class="info-peli">
-            El_Impostor la película
-        </div>
+
+<!-- TARJETA 1 -->
+<div class="tarjeta" data-id="impostor1">
+    <div class="contenedor-poster">
+        <img src="https://archive.org/download/poster_20260428/poster.png">
     </div>
 
-    <div class="tarjeta bloqueada">
-        <div class="contenedor-poster">
-            <img src="https://archive.org/download/poster2_202604/poster2.png">
+    <div class="hover-info">
+        <div class="botones">
+            <button class="btn play" onclick="reproducir()">▶</button>
+            <button class="btn lista" onclick="toggleLista(event,'impostor1')">＋</button>
         </div>
-        <div class="info-peli">
-            El_Impostor 2 la película
-        </div>
+        <p>El_Impostor la película</p>
+        <button onclick="abrirMenu()">Más info</button>
     </div>
 </div>
 
-<!-- MENU PRINCIPAL -->
-<div id="menuPrincipal" class="overlay">
-    <span class="cerrar" onclick="cerrarTodo()">&times;</span>
-    <div class="menu-box">
-        <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
-        <button class="extra-btn" onclick="abrirSaga()">Más de esta saga</button>
-        <button class="extra-btn">Añadir a mi lista</button>
+<!-- TARJETA 2 -->
+<div class="tarjeta bloqueada">
+    <div class="contenedor-poster">
+        <img src="https://archive.org/download/poster2_202604/poster2.png">
     </div>
 </div>
 
-<!-- MENU SAGA -->
-<div id="menuSaga" class="overlay">
-    <span class="cerrar" onclick="cerrarTodo()">&times;</span>
-    <h2>El Impostor - Saga</h2>
+</div>
 
-    <div class="saga-grid">
+<!-- MENU -->
+<div id="menu" class="overlay">
+    <span class="cerrar" onclick="cerrarTodo()">✕</span>
+    <button onclick="reproducir()">▶ Reproducir</button>
+    <button onclick="abrirSaga()">Más de esta saga</button>
+</div>
+
+<!-- SAGA -->
+<div id="saga" class="overlay">
+    <span class="cerrar" onclick="cerrarTodo()">✕</span>
+
+    <div class="catalogo">
         <div class="tarjeta" onclick="reproducir()">
-            <div class="contenedor-poster">
-                <img src="https://archive.org/download/poster_20260428/poster.png">
-            </div>
-            <div class="info-peli">El_Impostor 1</div>
+            <img src="https://archive.org/download/poster_20260428/poster.png">
         </div>
 
         <div class="tarjeta bloqueada">
-            <div class="contenedor-poster">
-                <img src="https://archive.org/download/poster2_202604/poster2.png">
-            </div>
-            <div class="info-peli">El_Impostor 2</div>
+            <img src="https://archive.org/download/poster2_202604/poster2.png">
         </div>
     </div>
 </div>
 
-<!-- REPRODUCTOR -->
+<!-- VIDEO -->
 <div id="reproductor">
-    <span class="cerrar" onclick="cerrarPeli()">&times;</span>
-    <video id="videoPeli" controls>
+    <span class="cerrar" onclick="cerrarPeli()">✕</span>
+    <video id="video" controls>
         <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
     </video>
 </div>
 
 <script>
-const menu = document.getElementById('menuPrincipal');
-const saga = document.getElementById('menuSaga');
-const modal = document.getElementById('reproductor');
-const video = document.getElementById('videoPeli');
+const menu = document.getElementById("menu");
+const saga = document.getElementById("saga");
+const modal = document.getElementById("reproductor");
+const video = document.getElementById("video");
 
-function abrirMenu() {
-    menu.style.display = 'flex';
-}
+/* MENÚ */
+function abrirMenu() { menu.style.display="flex"; }
+function abrirSaga() { menu.style.display="none"; saga.style.display="flex"; }
+function cerrarTodo() { menu.style.display="none"; saga.style.display="none"; }
 
-function abrirSaga() {
-    menu.style.display = 'none';
-    saga.style.display = 'flex';
-}
-
-function cerrarTodo() {
-    menu.style.display = 'none';
-    saga.style.display = 'none';
-}
-
+/* VIDEO */
 function reproducir() {
     cerrarTodo();
-    modal.style.display = 'flex';
+    modal.style.display="flex";
     video.play();
 }
 
 function cerrarPeli() {
-    modal.style.display = 'none';
+    modal.style.display="none";
     video.pause();
-    video.currentTime = 0;
+    video.currentTime=0;
 }
+
+/* ===== MI LISTA (LOCALSTORAGE) ===== */
+function toggleLista(e,id){
+    e.stopPropagation();
+
+    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+
+    if(lista.includes(id)){
+        lista = lista.filter(x=>x!==id);
+    }else{
+        lista.push(id);
+    }
+
+    localStorage.setItem("miLista", JSON.stringify(lista));
+    actualizarBotones();
+}
+
+function actualizarBotones(){
+    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+
+    document.querySelectorAll(".tarjeta").forEach(t=>{
+        let id = t.dataset.id;
+        let btn = t.querySelector(".lista");
+
+        if(btn){
+            if(lista.includes(id)){
+                btn.classList.add("en-lista");
+                btn.textContent="✔";
+            }else{
+                btn.classList.remove("en-lista");
+                btn.textContent="＋";
+            }
+        }
+    });
+}
+
+actualizarBotones();
 </script>
 
 </body>
