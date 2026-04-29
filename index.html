@@ -17,7 +17,6 @@
         
         .catalogo { display: flex; gap: 30px; flex-wrap: wrap; }
 
-        /* Tarjetas */
         .tarjeta { 
             background-color: #181818; 
             border-radius: 4px; 
@@ -68,6 +67,45 @@
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
+        /* ===== MENÚ TIPO NETFLIX ===== */
+        #menuPeli {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .menu-contenido {
+            text-align: center;
+        }
+
+        .menu-contenido button {
+            display: block;
+            margin: 10px auto;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .play-btn {
+            background-color: white;
+            color: black;
+            font-weight: bold;
+        }
+
+        .extra-btn {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* REPRODUCTOR */
         #reproductor { 
             display: none; 
             position: fixed; 
@@ -78,76 +116,96 @@
             justify-content: center; 
             align-items: center; 
         }
+
         #videoPeli { 
             width: 80%; 
             max-width: 1000px; 
-            height: auto; 
             aspect-ratio: 16 / 9; 
             background: #000; 
-            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
+
         .cerrar { 
             position: absolute; 
             top: 20px; right: 40px; 
             font-size: 50px; 
             color: white; 
             cursor: pointer; 
-            z-index: 1001; 
         }
     </style>
 </head>
 <body>
 
-    <h1>ÑOTFLIX</h1>
-    <h2>Películas</h2>
+<h1>ÑOTFLIX</h1>
+<h2>Películas</h2>
 
-    <div class="catalogo">
-        <div class="tarjeta" onclick="abrirPeli()">
-            <div class="contenedor-poster">
-                <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster El Impostor">
-            </div>
-            <div class="info-peli">
-                <p class="titulo-peli">El_Impostor la película</p>
-            </div>
+<div class="catalogo">
+    <div class="tarjeta" onclick="abrirMenu()">
+        <div class="contenedor-poster">
+            <img src="https://archive.org/download/poster_20260428/poster.png">
         </div>
-
-        <div class="tarjeta bloqueada">
-            <div class="contenedor-poster">
-                <span class="proximamente">Próximamente</span>
-                <img src="https://archive.org/download/poster2_202604/poster2.png" alt="Poster El Impostor 2">
-            </div>
-            <div class="info-peli">
-                <p class="titulo-peli">El_Impostor 2 la película</p>
-            </div>
+        <div class="info-peli">
+            <p class="titulo-peli">El_Impostor la película</p>
         </div>
     </div>
 
-    <div id="reproductor">
-        <span class="cerrar" onclick="cerrarPeli()">&times;</span>
-        <video id="videoPeli" controls preload="auto">
-            <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
-            Tu navegador no soporta video.
-        </video>
+    <div class="tarjeta bloqueada">
+        <div class="contenedor-poster">
+            <span class="proximamente">Próximamente</span>
+            <img src="https://archive.org/download/poster2_202604/poster2.png">
+        </div>
+        <div class="info-peli">
+            <p class="titulo-peli">El_Impostor 2 la película</p>
+        </div>
     </div>
+</div>
 
-    <script>
-        const modal = document.getElementById('reproductor');
-        const video = document.getElementById('videoPeli');
+<!-- MENÚ -->
+<div id="menuPeli">
+    <span class="cerrar" onclick="cerrarMenu()">&times;</span>
+    <div class="menu-contenido">
+        <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
+        <button class="extra-btn">Más de esta saga</button>
+        <button class="extra-btn">Añadir a mi lista</button>
+    </div>
+</div>
 
-        function abrirPeli() {
-            modal.style.display = 'flex';
-            video.load(); 
-            video.play().catch(e => console.log("Play manual necesario"));
-        }
+<!-- REPRODUCTOR -->
+<div id="reproductor">
+    <span class="cerrar" onclick="cerrarPeli()">&times;</span>
+    <video id="videoPeli" controls>
+        <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
+    </video>
+</div>
 
-        function cerrarPeli() {
-            modal.style.display = 'none';
-            video.pause();
-            video.currentTime = 0;
-        }
+<script>
+const modal = document.getElementById('reproductor');
+const video = document.getElementById('videoPeli');
+const menu = document.getElementById('menuPeli');
 
-        window.addEventListener('keydown', (e) => { if (e.key === "Escape") cerrarPeli(); });
-        modal.addEventListener('click', (e) => { if (e.target === modal) cerrarPeli(); });
-    </script>
+function abrirMenu() {
+    menu.style.display = 'flex';
+}
+
+function cerrarMenu() {
+    menu.style.display = 'none';
+}
+
+function reproducir() {
+    cerrarMenu();
+    abrirPeli();
+}
+
+function abrirPeli() {
+    modal.style.display = 'flex';
+    video.play();
+}
+
+function cerrarPeli() {
+    modal.style.display = 'none';
+    video.pause();
+    video.currentTime = 0;
+}
+</script>
+
 </body>
 </html>
