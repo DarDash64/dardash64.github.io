@@ -17,6 +17,7 @@
         
         .catalogo { display: flex; gap: 30px; flex-wrap: wrap; }
 
+        /* Tarjetas */
         .tarjeta { 
             background-color: #181818; 
             border-radius: 4px; 
@@ -31,6 +32,7 @@
             box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); 
         }
 
+        /* Estilo para items que no existen aún */
         .bloqueada { 
             cursor: not-allowed; 
             opacity: 0.6; 
@@ -67,6 +69,7 @@
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
+        /* REPRODUCTOR */
         #reproductor { 
             display: none; 
             position: fixed; 
@@ -101,7 +104,7 @@
     <h2>Mis Películas Caseras</h2>
 
     <div class="catalogo">
-        <!-- PELÍCULA 1 -->
+        <!-- PELÍCULA 1: EL IMPOSTOR -->
         <div class="tarjeta" onclick="abrirPeli()">
             <div class="contenedor-poster">
                 <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster El Impostor">
@@ -111,7 +114,7 @@
             </div>
         </div>
 
-        <!-- PELÍCULA 2 -->
+        <!-- PELÍCULA 2: EL IMPOSTOR 2 (PRÓXIMAMENTE) -->
         <div class="tarjeta bloqueada">
             <div class="contenedor-poster">
                 <span class="proximamente">Próximamente</span>
