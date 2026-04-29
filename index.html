@@ -17,7 +17,6 @@
         
         .catalogo { display: flex; gap: 30px; flex-wrap: wrap; }
 
-        /* Tarjetas */
         .tarjeta { 
             background-color: #181818; 
             border-radius: 4px; 
@@ -32,7 +31,6 @@
             box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); 
         }
 
-        /* Estilo para items que no existen aún */
         .bloqueada { 
             cursor: not-allowed; 
             opacity: 0.6; 
@@ -69,7 +67,6 @@
         .info-peli { padding: 15px; }
         .titulo-peli { font-size: 1.1rem; font-weight: bold; margin: 0; }
 
-        /* REPRODUCTOR */
         #reproductor { 
             display: none; 
             position: fixed; 
@@ -104,7 +101,7 @@
     <h2>Mis Películas Caseras</h2>
 
     <div class="catalogo">
-        <!-- PELÍCULA 1: EL IMPOSTOR -->
+        <!-- PELÍCULA 1 -->
         <div class="tarjeta" onclick="abrirPeli()">
             <div class="contenedor-poster">
                 <img src="https://archive.org/download/poster_20260428/poster.png" alt="Poster El Impostor">
@@ -114,7 +111,7 @@
             </div>
         </div>
 
-        <!-- PELÍCULA 2: EL IMPOSTOR 2 (PRÓXIMAMENTE) -->
+        <!-- PELÍCULA 2 -->
         <div class="tarjeta bloqueada">
             <div class="contenedor-poster">
                 <span class="proximamente">Próximamente</span>
@@ -122,17 +119,6 @@
             </div>
             <div class="info-peli">
                 <p class="titulo-peli">El_Impostor 2 la película</p>
-            </div>
-        </div>
-
-        <!-- EXTRAS: MEMECRAFT (BLOQUEADO) -->
-        <div class="tarjeta bloqueada">
-            <div class="contenedor-poster">
-                <span class="proximamente">Próximamente</span>
-                <div style="font-size: 40px;">🎮</div>
-            </div>
-            <div class="info-peli">
-                <p class="titulo-peli">MemeCraft</p>
             </div>
         </div>
     </div>
