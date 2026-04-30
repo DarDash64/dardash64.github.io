@@ -6,22 +6,12 @@
 <title>Ñotflix</title>
 
 <style>
-body {
-    background:#141414;
-    color:white;
-    font-family:Arial;
-    margin:0;
-    padding:40px;
-}
+body { background:#141414; color:white; font-family:Arial; padding:40px; margin:0; }
 
 h1 { color:#E50914; font-size:3rem; letter-spacing:4px; }
 h2 { color:#E5E5E5; }
 
-.catalogo {
-    display:flex;
-    gap:30px;
-    flex-wrap:wrap;
-}
+.catalogo { display:flex; gap:30px; flex-wrap:wrap; }
 
 /* TARJETAS */
 .tarjeta {
@@ -35,38 +25,25 @@ h2 { color:#E5E5E5; }
 }
 
 .tarjeta:hover {
-    transform:scale(1.1);
-    z-index:10;
-    box-shadow:0 0 20px rgba(229,9,20,0.6);
-}
-
-.bloqueada {
-    opacity:0.5;
-    pointer-events:none;
+    transform:scale(1.15);
+    z-index:20;
 }
 
 /* POSTER */
 .contenedor-poster {
     width:100%;
     height:160px;
+    position:relative;
 }
 
-.contenedor-poster img {
+.contenedor-poster img,
+.contenedor-poster video {
     width:100%;
     height:100%;
     object-fit:cover;
 }
 
-/* INFO */
-.info-peli {
-    padding:10px;
-}
-
-.titulo-peli {
-    margin:0;
-}
-
-/* HOVER INFO */
+/* HOVER */
 .hover-info {
     position:absolute;
     bottom:0;
@@ -77,15 +54,10 @@ h2 { color:#E5E5E5; }
     padding:10px;
 }
 
-.tarjeta:hover .hover-info {
-    opacity:1;
-}
+.tarjeta:hover .hover-info { opacity:1; }
 
 /* BOTONES */
-.botones {
-    display:flex;
-    gap:10px;
-}
+.botones { display:flex; gap:10px; }
 
 .btn {
     padding:8px 12px;
@@ -99,7 +71,10 @@ h2 { color:#E5E5E5; }
 
 .en-lista { background:green !important; }
 
-/* OVERLAYS */
+/* BLOQUEADA */
+.bloqueada { opacity:0.5; pointer-events:none; }
+
+/* OVERLAY */
 .overlay {
     display:none;
     position:fixed;
@@ -121,7 +96,6 @@ h2 { color:#E5E5E5; }
 }
 
 .menu-box button {
-    display:block;
     width:100%;
     margin:10px 0;
     padding:12px;
@@ -130,7 +104,7 @@ h2 { color:#E5E5E5; }
     cursor:pointer;
 }
 
-.play-btn { background:white; color:black; font-weight:bold; }
+.play-btn { background:white; color:black; }
 .extra-btn { background:rgba(255,255,255,0.2); color:white; }
 
 .cerrar {
@@ -152,10 +126,32 @@ h2 { color:#E5E5E5; }
     z-index:3000;
 }
 
-video {
-    width:80%;
-    max-width:1000px;
+video { max-width:80%; }
+
+/* SCROLL NETFLIX */
+.fila-saga {
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    padding:20px;
 }
+
+.fila-saga::-webkit-scrollbar { display:none; }
+
+/* FLECHAS */
+.flecha {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:40px;
+    background:rgba(0,0,0,0.5);
+    padding:10px;
+    cursor:pointer;
+}
+
+.flecha.izq { left:10px; }
+.flecha.der { right:10px; }
 </style>
 </head>
 
@@ -166,10 +162,14 @@ video {
 
 <div class="catalogo">
 
-<!-- TARJETA 1 -->
+<!-- TARJETA -->
 <div class="tarjeta" data-id="impostor1">
+
     <div class="contenedor-poster">
-        <img src="https://archive.org/download/poster_20260428/poster.png">
+        <img id="img1" src="https://archive.org/download/poster_20260428/poster.png">
+        <video id="preview1" muted loop style="display:none;">
+            <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
+        </video>
     </div>
 
     <div class="hover-info">
@@ -179,16 +179,6 @@ video {
         </div>
         <p>El_Impostor la película</p>
         <button onclick="abrirMenu()">Más info</button>
-    </div>
-</div>
-
-<!-- TARJETA 2 -->
-<div class="tarjeta bloqueada">
-    <div class="contenedor-poster">
-        <img src="https://archive.org/download/poster2_202604/poster2.png">
-    </div>
-    <div class="info-peli">
-        <p class="titulo-peli">El_Impostor 2 la película</p>
     </div>
 </div>
 
@@ -208,23 +198,20 @@ video {
     <span class="cerrar" onclick="cerrarTodo()">✕</span>
     <h2>El Impostor - Saga</h2>
 
-    <div class="catalogo">
+    <div class="flecha izq" onclick="scrollSaga(-1)">❮</div>
+    <div class="flecha der" onclick="scrollSaga(1)">❯</div>
+
+    <div class="fila-saga" id="filaSaga">
 
         <div class="tarjeta" onclick="reproducir()">
             <div class="contenedor-poster">
                 <img src="https://archive.org/download/poster_20260428/poster.png">
-            </div>
-            <div class="info-peli">
-                <p class="titulo-peli">El_Impostor la película</p>
             </div>
         </div>
 
         <div class="tarjeta bloqueada">
             <div class="contenedor-poster">
                 <img src="https://archive.org/download/poster2_202604/poster2.png">
-            </div>
-            <div class="info-peli">
-                <p class="titulo-peli">El_Impostor 2 la película</p>
             </div>
         </div>
 
@@ -245,53 +232,63 @@ const saga = document.getElementById("menuSaga");
 const reproductor = document.getElementById("reproductor");
 const video = document.getElementById("videoPeli");
 
-/* CONTROL GLOBAL */
-function cerrarTodo() {
-    menu.style.display = "none";
-    saga.style.display = "none";
-    reproductor.style.display = "none";
-
+/* CONTROL */
+function cerrarTodo(){
+    menu.style.display="none";
+    saga.style.display="none";
+    reproductor.style.display="none";
     video.pause();
-    video.currentTime = 0;
+    video.currentTime=0;
 }
 
 /* MENÚ */
-function abrirMenu() {
+function abrirMenu(){
     cerrarTodo();
-    menu.style.display = "flex";
+    menu.style.display="flex";
 }
 
-function abrirSaga() {
-    menu.style.display = "none";
-    saga.style.display = "flex";
+/* SAGA */
+function abrirSaga(){
+    menu.style.display="none";
+    saga.style.display="flex";
 }
 
 /* VIDEO */
-function reproducir() {
+function reproducir(){
     cerrarTodo();
-    reproductor.style.display = "flex";
-
+    reproductor.style.display="flex";
     video.load();
     video.play().catch(()=>{});
 }
 
-/* CLICK FUERA */
-[menu, saga, reproductor].forEach(el=>{
-    el.addEventListener("click", e=>{
-        if(e.target === el) cerrarTodo();
-    });
+/* SCROLL */
+function scrollSaga(dir){
+    document.getElementById("filaSaga")
+    .scrollBy({left: dir*300, behavior:"smooth"});
+}
+
+/* PREVIEW HOVER */
+const tarjeta = document.querySelector(".tarjeta");
+const img = document.getElementById("img1");
+const preview = document.getElementById("preview1");
+
+tarjeta.addEventListener("mouseenter", ()=>{
+    img.style.display="none";
+    preview.style.display="block";
+    preview.play();
 });
 
-/* ESC */
-window.addEventListener("keydown", e=>{
-    if(e.key === "Escape") cerrarTodo();
+tarjeta.addEventListener("mouseleave", ()=>{
+    preview.pause();
+    preview.currentTime=0;
+    preview.style.display="none";
+    img.style.display="block";
 });
 
 /* MI LISTA */
 function toggleLista(e,id){
     e.stopPropagation();
-
-    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+    let lista = JSON.parse(localStorage.getItem("miLista"))||[];
 
     if(lista.includes(id)){
         lista = lista.filter(x=>x!==id);
@@ -304,12 +301,11 @@ function toggleLista(e,id){
 }
 
 function actualizarBotones(){
-    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+    let lista = JSON.parse(localStorage.getItem("miLista"))||[];
 
     document.querySelectorAll(".tarjeta").forEach(t=>{
         let id = t.dataset.id;
         let btn = t.querySelector(".lista");
-
         if(!btn) return;
 
         if(lista.includes(id)){
@@ -323,6 +319,18 @@ function actualizarBotones(){
 }
 
 actualizarBotones();
+
+/* CERRAR CLICK FUERA */
+[menu,saga,reproductor].forEach(el=>{
+    el.addEventListener("click",e=>{
+        if(e.target===el) cerrarTodo();
+    });
+});
+
+/* ESC */
+window.addEventListener("keydown",e=>{
+    if(e.key==="Escape") cerrarTodo();
+});
 </script>
 
 </body>
