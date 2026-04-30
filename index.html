@@ -46,10 +46,24 @@ h2 { color:#E5E5E5; }
 }
 
 /* POSTER */
-.contenedor-poster img {
+.contenedor-poster {
     width:100%;
     height:160px;
+}
+
+.contenedor-poster img {
+    width:100%;
+    height:100%;
     object-fit:cover;
+}
+
+/* INFO */
+.info-peli {
+    padding:10px;
+}
+
+.titulo-peli {
+    margin:0;
 }
 
 /* HOVER INFO */
@@ -152,6 +166,7 @@ video {
 
 <div class="catalogo">
 
+<!-- TARJETA 1 -->
 <div class="tarjeta" data-id="impostor1">
     <div class="contenedor-poster">
         <img src="https://archive.org/download/poster_20260428/poster.png">
@@ -167,9 +182,13 @@ video {
     </div>
 </div>
 
+<!-- TARJETA 2 -->
 <div class="tarjeta bloqueada">
     <div class="contenedor-poster">
         <img src="https://archive.org/download/poster2_202604/poster2.png">
+    </div>
+    <div class="info-peli">
+        <p class="titulo-peli">El_Impostor 2 la película</p>
     </div>
 </div>
 
@@ -190,13 +209,25 @@ video {
     <h2>El Impostor - Saga</h2>
 
     <div class="catalogo">
+
         <div class="tarjeta" onclick="reproducir()">
-            <img src="https://archive.org/download/poster_20260428/poster.png">
+            <div class="contenedor-poster">
+                <img src="https://archive.org/download/poster_20260428/poster.png">
+            </div>
+            <div class="info-peli">
+                <p class="titulo-peli">El_Impostor la película</p>
+            </div>
         </div>
 
         <div class="tarjeta bloqueada">
-            <img src="https://archive.org/download/poster2_202604/poster2.png">
+            <div class="contenedor-poster">
+                <img src="https://archive.org/download/poster2_202604/poster2.png">
+            </div>
+            <div class="info-peli">
+                <p class="titulo-peli">El_Impostor 2 la película</p>
+            </div>
         </div>
+
     </div>
 </div>
 
