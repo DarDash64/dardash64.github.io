@@ -6,11 +6,29 @@
 <title>Ñotflix</title>
 
 <style>
-body { background:#141414; color:white; font-family:Arial; padding:40px; margin:0; }
+body { background:#141414; color:white; font-family:Arial; margin:0; }
 
-h1 { color:#E50914; font-size:3rem; letter-spacing:4px; }
+/* NAVBAR */
+.navbar {
+    position:fixed;
+    top:0;
+    width:100%;
+    background:rgba(0,0,0,0.8);
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:5000;
+}
+
+.logo { color:#E50914; font-size:2rem; font-weight:bold; }
+.nav-links span { margin-left:20px; cursor:pointer; }
+
+.contenido { padding:100px 40px 40px; }
+
 h2 { color:#E5E5E5; }
 
+/* CATÁLOGO */
 .catalogo { display:flex; gap:30px; flex-wrap:wrap; }
 
 /* TARJETAS */
@@ -24,23 +42,13 @@ h2 { color:#E5E5E5; }
     cursor:pointer;
 }
 
-.tarjeta:hover {
-    transform:scale(1.15);
-    z-index:20;
-}
+.tarjeta:hover { transform:scale(1.15); z-index:20; }
 
 /* POSTER */
-.contenedor-poster {
-    width:100%;
-    height:160px;
-    position:relative;
-}
-
+.contenedor-poster { height:160px; position:relative; }
 .contenedor-poster img,
 .contenedor-poster video {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+    width:100%; height:100%; object-fit:cover;
 }
 
 /* HOVER */
@@ -53,22 +61,13 @@ h2 { color:#E5E5E5; }
     transition:0.3s;
     padding:10px;
 }
-
 .tarjeta:hover .hover-info { opacity:1; }
 
 /* BOTONES */
 .botones { display:flex; gap:10px; }
-
-.btn {
-    padding:8px 12px;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-}
-
+.btn { padding:8px 12px; border:none; border-radius:4px; cursor:pointer; }
 .play { background:white; color:black; }
 .lista { background:rgba(255,255,255,0.2); color:white; }
-
 .en-lista { background:green !important; }
 
 /* BLOQUEADA */
@@ -136,10 +135,8 @@ video { max-width:80%; }
     scroll-behavior:smooth;
     padding:20px;
 }
-
 .fila-saga::-webkit-scrollbar { display:none; }
 
-/* FLECHAS */
 .flecha {
     position:absolute;
     top:50%;
@@ -149,7 +146,6 @@ video { max-width:80%; }
     padding:10px;
     cursor:pointer;
 }
-
 .flecha.izq { left:10px; }
 .flecha.der { right:10px; }
 </style>
@@ -157,10 +153,20 @@ video { max-width:80%; }
 
 <body>
 
-<h1>ÑOTFLIX</h1>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">ÑOTFLIX</div>
+    <div class="nav-links">
+        <span onclick="mostrarInicio()">Inicio</span>
+        <span onclick="mostrarLista()">Mi lista</span>
+    </div>
+</div>
+
+<div class="contenido">
+
 <h2>Películas</h2>
 
-<div class="catalogo">
+<div id="inicio" class="catalogo">
 
 <!-- IMPOSTOR 1 -->
 <div class="tarjeta" data-id="impostor1">
@@ -186,11 +192,13 @@ video { max-width:80%; }
     <div class="contenedor-poster">
         <img src="https://archive.org/download/poster2_202604/poster2.png">
     </div>
-
-    <div class="hover-info">
-        <p>El_Impostor 2 la película</p>
-    </div>
 </div>
+
+</div>
+
+<!-- MI LISTA -->
+<h2 id="tituloLista" style="display:none;">Mi lista</h2>
+<div id="miLista" class="catalogo" style="display:none;"></div>
 
 </div>
 
@@ -212,7 +220,6 @@ video { max-width:80%; }
     <div class="flecha der" onclick="scrollSaga(1)">❯</div>
 
     <div class="fila-saga" id="filaSaga">
-
         <div class="tarjeta" onclick="reproducir()">
             <div class="contenedor-poster">
                 <img src="https://archive.org/download/poster_20260428/poster.png">
@@ -224,7 +231,6 @@ video { max-width:80%; }
                 <img src="https://archive.org/download/poster2_202604/poster2.png">
             </div>
         </div>
-
     </div>
 </div>
 
@@ -252,16 +258,8 @@ function cerrarTodo(){
 }
 
 /* MENÚ */
-function abrirMenu(){
-    cerrarTodo();
-    menu.style.display="flex";
-}
-
-/* SAGA */
-function abrirSaga(){
-    menu.style.display="none";
-    saga.style.display="flex";
-}
+function abrirMenu(){ cerrarTodo(); menu.style.display="flex"; }
+function abrirSaga(){ menu.style.display="none"; saga.style.display="flex"; }
 
 /* VIDEO */
 function reproducir(){
@@ -271,10 +269,23 @@ function reproducir(){
     video.play().catch(()=>{});
 }
 
+/* NAV */
+function mostrarInicio(){
+    document.getElementById("inicio").style.display="flex";
+    document.getElementById("miLista").style.display="none";
+    document.getElementById("tituloLista").style.display="none";
+}
+
+function mostrarLista(){
+    actualizarMiLista();
+    document.getElementById("inicio").style.display="none";
+    document.getElementById("miLista").style.display="flex";
+    document.getElementById("tituloLista").style.display="block";
+}
+
 /* SCROLL */
 function scrollSaga(dir){
-    document.getElementById("filaSaga")
-    .scrollBy({left: dir*300, behavior:"smooth"});
+    document.getElementById("filaSaga").scrollBy({left:dir*300,behavior:"smooth"});
 }
 
 /* PREVIEW */
@@ -282,13 +293,13 @@ const tarjeta = document.querySelector('[data-id="impostor1"]');
 const img = document.getElementById("img1");
 const preview = document.getElementById("preview1");
 
-tarjeta.addEventListener("mouseenter", ()=>{
+tarjeta.addEventListener("mouseenter",()=>{
     img.style.display="none";
     preview.style.display="block";
     preview.play();
 });
 
-tarjeta.addEventListener("mouseleave", ()=>{
+tarjeta.addEventListener("mouseleave",()=>{
     preview.pause();
     preview.currentTime=0;
     preview.style.display="none";
@@ -306,38 +317,27 @@ function toggleLista(e,id){
         lista.push(id);
     }
 
-    localStorage.setItem("miLista", JSON.stringify(lista));
-    actualizarBotones();
+    localStorage.setItem("miLista",JSON.stringify(lista));
 }
 
-function actualizarBotones(){
+function actualizarMiLista(){
     let lista = JSON.parse(localStorage.getItem("miLista"))||[];
+    let contenedor = document.getElementById("miLista");
+    contenedor.innerHTML="";
 
-    document.querySelectorAll(".tarjeta").forEach(t=>{
-        let id = t.dataset.id;
-        let btn = t.querySelector(".lista");
-        if(!btn) return;
-
-        if(lista.includes(id)){
-            btn.classList.add("en-lista");
-            btn.textContent="✔";
-        }else{
-            btn.classList.remove("en-lista");
-            btn.textContent="＋";
-        }
+    lista.forEach(id=>{
+        let card = document.querySelector(`[data-id="${id}"]`).cloneNode(true);
+        contenedor.appendChild(card);
     });
 }
 
-actualizarBotones();
-
-/* CERRAR CLICK FUERA */
+/* CIERRES */
 [menu,saga,reproductor].forEach(el=>{
     el.addEventListener("click",e=>{
         if(e.target===el) cerrarTodo();
     });
 });
 
-/* ESC */
 window.addEventListener("keydown",e=>{
     if(e.key==="Escape") cerrarTodo();
 });
