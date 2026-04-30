@@ -6,25 +6,43 @@
 <title>Ñotflix</title>
 
 <style>
-body { background:#141414; color:white; font-family:Arial; padding:40px; }
+body {
+    background:#141414;
+    color:white;
+    font-family:Arial;
+    margin:0;
+    padding:40px;
+}
+
 h1 { color:#E50914; font-size:3rem; letter-spacing:4px; }
 h2 { color:#E5E5E5; }
 
-.catalogo { display:flex; gap:30px; flex-wrap:wrap; }
+.catalogo {
+    display:flex;
+    gap:30px;
+    flex-wrap:wrap;
+}
 
-/* TARJETA */
+/* TARJETAS */
 .tarjeta {
     position:relative;
-    background:#181818;
     width:280px;
+    background:#181818;
     border-radius:4px;
     overflow:hidden;
     transition:0.3s;
+    cursor:pointer;
 }
 
 .tarjeta:hover {
     transform:scale(1.1);
     z-index:10;
+    box-shadow:0 0 20px rgba(229,9,20,0.6);
+}
+
+.bloqueada {
+    opacity:0.5;
+    pointer-events:none;
 }
 
 /* POSTER */
@@ -34,7 +52,7 @@ h2 { color:#E5E5E5; }
     object-fit:cover;
 }
 
-/* OVERLAY HOVER */
+/* HOVER INFO */
 .hover-info {
     position:absolute;
     bottom:0;
@@ -58,40 +76,48 @@ h2 { color:#E5E5E5; }
 .btn {
     padding:8px 12px;
     border:none;
-    cursor:pointer;
     border-radius:4px;
+    cursor:pointer;
 }
 
 .play { background:white; color:black; }
 .lista { background:rgba(255,255,255,0.2); color:white; }
 
-/* BLOQUEADA */
-.bloqueada { opacity:0.6; filter:grayscale(1); pointer-events:none; }
+.en-lista { background:green !important; }
 
-/* MENÚ */
+/* OVERLAYS */
 .overlay {
     display:none;
     position:fixed;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.95);
-    top:0; left:0;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    z-index:2000;
     justify-content:center;
     align-items:center;
     flex-direction:column;
-    z-index:1000;
 }
 
-/* VIDEO */
-#reproductor {
-    display:none;
-    position:fixed;
-    width:100%; height:100%;
-    background:black;
-    justify-content:center;
-    align-items:center;
+/* MENÚ */
+.menu-box {
+    background:#181818;
+    padding:30px;
+    border-radius:8px;
+    text-align:center;
+    min-width:300px;
 }
 
-video { width:80%; }
+.menu-box button {
+    display:block;
+    width:100%;
+    margin:10px 0;
+    padding:12px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.play-btn { background:white; color:black; font-weight:bold; }
+.extra-btn { background:rgba(255,255,255,0.2); color:white; }
 
 .cerrar {
     position:absolute;
@@ -101,9 +127,20 @@ video { width:80%; }
     cursor:pointer;
 }
 
-/* MARCADO EN LISTA */
-.en-lista {
-    background:green !important;
+/* REPRODUCTOR */
+#reproductor {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:black;
+    justify-content:center;
+    align-items:center;
+    z-index:3000;
+}
+
+video {
+    width:80%;
+    max-width:1000px;
 }
 </style>
 </head>
@@ -115,7 +152,6 @@ video { width:80%; }
 
 <div class="catalogo">
 
-<!-- TARJETA 1 -->
 <div class="tarjeta" data-id="impostor1">
     <div class="contenedor-poster">
         <img src="https://archive.org/download/poster_20260428/poster.png">
@@ -131,7 +167,6 @@ video { width:80%; }
     </div>
 </div>
 
-<!-- TARJETA 2 -->
 <div class="tarjeta bloqueada">
     <div class="contenedor-poster">
         <img src="https://archive.org/download/poster2_202604/poster2.png">
@@ -141,15 +176,18 @@ video { width:80%; }
 </div>
 
 <!-- MENU -->
-<div id="menu" class="overlay">
+<div id="menuPrincipal" class="overlay">
     <span class="cerrar" onclick="cerrarTodo()">✕</span>
-    <button onclick="reproducir()">▶ Reproducir</button>
-    <button onclick="abrirSaga()">Más de esta saga</button>
+    <div class="menu-box">
+        <button class="play-btn" onclick="reproducir()">▶ Reproducir</button>
+        <button class="extra-btn" onclick="abrirSaga()">Más de esta saga</button>
+    </div>
 </div>
 
 <!-- SAGA -->
-<div id="saga" class="overlay">
+<div id="menuSaga" class="overlay">
     <span class="cerrar" onclick="cerrarTodo()">✕</span>
+    <h2>El Impostor - Saga</h2>
 
     <div class="catalogo">
         <div class="tarjeta" onclick="reproducir()">
@@ -164,37 +202,61 @@ video { width:80%; }
 
 <!-- VIDEO -->
 <div id="reproductor">
-    <span class="cerrar" onclick="cerrarPeli()">✕</span>
-    <video id="video" controls>
+    <span class="cerrar" onclick="cerrarTodo()">✕</span>
+    <video id="videoPeli" controls>
         <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
     </video>
 </div>
 
 <script>
-const menu = document.getElementById("menu");
-const saga = document.getElementById("saga");
-const modal = document.getElementById("reproductor");
-const video = document.getElementById("video");
+const menu = document.getElementById("menuPrincipal");
+const saga = document.getElementById("menuSaga");
+const reproductor = document.getElementById("reproductor");
+const video = document.getElementById("videoPeli");
+
+/* CONTROL GLOBAL */
+function cerrarTodo() {
+    menu.style.display = "none";
+    saga.style.display = "none";
+    reproductor.style.display = "none";
+
+    video.pause();
+    video.currentTime = 0;
+}
 
 /* MENÚ */
-function abrirMenu() { menu.style.display="flex"; }
-function abrirSaga() { menu.style.display="none"; saga.style.display="flex"; }
-function cerrarTodo() { menu.style.display="none"; saga.style.display="none"; }
+function abrirMenu() {
+    cerrarTodo();
+    menu.style.display = "flex";
+}
+
+function abrirSaga() {
+    menu.style.display = "none";
+    saga.style.display = "flex";
+}
 
 /* VIDEO */
 function reproducir() {
     cerrarTodo();
-    modal.style.display="flex";
-    video.play();
+    reproductor.style.display = "flex";
+
+    video.load();
+    video.play().catch(()=>{});
 }
 
-function cerrarPeli() {
-    modal.style.display="none";
-    video.pause();
-    video.currentTime=0;
-}
+/* CLICK FUERA */
+[menu, saga, reproductor].forEach(el=>{
+    el.addEventListener("click", e=>{
+        if(e.target === el) cerrarTodo();
+    });
+});
 
-/* ===== MI LISTA (LOCALSTORAGE) ===== */
+/* ESC */
+window.addEventListener("keydown", e=>{
+    if(e.key === "Escape") cerrarTodo();
+});
+
+/* MI LISTA */
 function toggleLista(e,id){
     e.stopPropagation();
 
@@ -217,14 +279,14 @@ function actualizarBotones(){
         let id = t.dataset.id;
         let btn = t.querySelector(".lista");
 
-        if(btn){
-            if(lista.includes(id)){
-                btn.classList.add("en-lista");
-                btn.textContent="✔";
-            }else{
-                btn.classList.remove("en-lista");
-                btn.textContent="＋";
-            }
+        if(!btn) return;
+
+        if(lista.includes(id)){
+            btn.classList.add("en-lista");
+            btn.textContent="✔";
+        }else{
+            btn.classList.remove("en-lista");
+            btn.textContent="＋";
         }
     });
 }
