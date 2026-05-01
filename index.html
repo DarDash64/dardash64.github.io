@@ -8,7 +8,7 @@
 <style>
 body { background:#141414; color:white; font-family:Arial; margin:0; }
 
-/* NAVBAR (ARREGLADA) */
+/* NAVBAR */
 .navbar {
     position:fixed;
     top:0;
@@ -16,12 +16,10 @@ body { background:#141414; color:white; font-family:Arial; margin:0; }
     width:100%;
     background:rgba(0,0,0,0.8);
     padding:15px 40px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
-    box-sizing:border-box; /* 🔥 FIX */
+    box-sizing:border-box;
     z-index:5000;
 }
 
@@ -82,7 +80,7 @@ h2 { color:#E5E5E5; }
     position:fixed;
     inset:0;
     background:rgba(0,0,0,0.9);
-    z-index:6000; /* 🔥 por encima de navbar */
+    z-index:6000;
     justify-content:center;
     align-items:center;
     flex-direction:column;
@@ -109,14 +107,14 @@ h2 { color:#E5E5E5; }
 .play-btn { background:white; color:black; }
 .extra-btn { background:rgba(255,255,255,0.2); color:white; }
 
-/* ❌ BOTÓN CERRAR (FIX TOTAL) */
+/* ❌ */
 .cerrar {
-    position:fixed; /* 🔥 antes absolute */
+    position:fixed;
     top:20px;
     right:20px;
     font-size:40px;
     cursor:pointer;
-    z-index:9999; /* 🔥 por encima de TODO */
+    z-index:9999;
 }
 
 /* REPRODUCTOR */
@@ -132,7 +130,7 @@ h2 { color:#E5E5E5; }
 
 video { max-width:80%; }
 
-/* SCROLL NETFLIX */
+/* SCROLL */
 .fila-saga {
     display:flex;
     gap:20px;
@@ -158,7 +156,6 @@ video { max-width:80%; }
 
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
     <div class="logo">ÑOTFLIX</div>
     <div class="nav-links">
@@ -169,7 +166,7 @@ video { max-width:80%; }
 
 <div class="contenido">
 
-<h2>Películas</h2>
+<h2 id="tituloPeliculas">Películas</h2>
 
 <div id="inicio" class="catalogo">
 
@@ -276,6 +273,7 @@ function mostrarInicio(){
     document.getElementById("inicio").style.display="flex";
     document.getElementById("miLista").style.display="none";
     document.getElementById("tituloLista").style.display="none";
+    document.getElementById("tituloPeliculas").style.display="block";
 }
 
 function mostrarLista(){
@@ -283,6 +281,7 @@ function mostrarLista(){
     document.getElementById("inicio").style.display="none";
     document.getElementById("miLista").style.display="flex";
     document.getElementById("tituloLista").style.display="block";
+    document.getElementById("tituloPeliculas").style.display="none";
 }
 
 /* SCROLL */
@@ -320,6 +319,25 @@ function toggleLista(e,id){
     }
 
     localStorage.setItem("miLista",JSON.stringify(lista));
+    actualizarBotones();
+}
+
+function actualizarBotones(){
+    let lista = JSON.parse(localStorage.getItem("miLista"))||[];
+
+    document.querySelectorAll(".tarjeta").forEach(t=>{
+        let id = t.dataset.id;
+        let btn = t.querySelector(".lista");
+        if(!btn) return;
+
+        if(lista.includes(id)){
+            btn.classList.add("en-lista");
+            btn.textContent="✔";
+        }else{
+            btn.classList.remove("en-lista");
+            btn.textContent="＋";
+        }
+    });
 }
 
 function actualizarMiLista(){
@@ -328,10 +346,21 @@ function actualizarMiLista(){
     contenedor.innerHTML="";
 
     lista.forEach(id=>{
-        let card = document.querySelector(`[data-id="${id}"]`).cloneNode(true);
-        contenedor.appendChild(card);
+        if(id==="impostor1"){
+            contenedor.innerHTML += `
+            <div class="tarjeta">
+                <div class="contenedor-poster">
+                    <img src="https://archive.org/download/poster_20260428/poster.png">
+                </div>
+                <div class="hover-info">
+                    <button class="btn play" onclick="reproducir()">▶</button>
+                </div>
+            </div>`;
+        }
     });
 }
+
+actualizarBotones();
 
 /* CIERRES */
 [menu,saga,reproductor].forEach(el=>{
