@@ -6,15 +6,19 @@
 <title>Ñotflix</title>
 
 <style>
-body {
+
+/* ================= BASE ================= */
+
+body{
     margin:0;
-    font-family:Arial;
+    font-family:Arial, Helvetica, sans-serif;
     background:#141414;
     color:white;
 }
 
-/* INTRO */
-#intro {
+/* ================= INTRO ================= */
+
+#intro{
     position:fixed;
     inset:0;
     background:black;
@@ -22,17 +26,28 @@ body {
     justify-content:center;
     align-items:center;
     z-index:10000;
-    transition:opacity 0.5s;
+    transition:opacity 0.6s;
 }
 
-#intro video {
+#intro video{
     width:100%;
     height:100%;
     object-fit:cover;
 }
 
-/* PERFILES */
-#perfiles {
+.skip{
+    position:absolute;
+    bottom:30px;
+    right:30px;
+    background:rgba(255,255,255,0.2);
+    padding:10px 20px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* ================= PERFILES ================= */
+
+#perfiles{
     display:none;
     position:fixed;
     inset:0;
@@ -42,27 +57,27 @@ body {
     padding-top:100px;
 }
 
-.perfil {
+.perfil{
     display:inline-block;
-    margin:20px;
+    margin:30px;
     cursor:pointer;
 }
 
-.perfil img {
+.perfil img{
     width:120px;
     border-radius:10px;
     transition:0.3s;
 }
 
-.perfil:hover img {
+.perfil:hover img{
     transform:scale(1.1);
 }
 
-/* NAVBAR */
-.navbar {
+/* ================= NAVBAR ================= */
+
+.navbar{
     position:fixed;
     top:0;
-    left:0;
     width:100%;
     background:rgba(0,0,0,0.8);
     padding:15px 40px;
@@ -70,74 +85,106 @@ body {
     justify-content:space-between;
     align-items:center;
     z-index:5000;
-    box-sizing:border-box;
 }
 
-.logo {
+.logo{
     color:#E50914;
     font-size:2rem;
     font-weight:bold;
 }
 
-.nav-links span {
+.nav-links span{
     margin-left:20px;
     cursor:pointer;
 }
 
-/* CONTENIDO */
-.contenido {
-    padding:100px 40px 40px;
+/* ================= CONTENIDO ================= */
+
+.contenido{
+    padding:100px 40px;
 }
 
-.catalogo {
+.catalogo{
     display:flex;
     gap:30px;
     flex-wrap:wrap;
 }
 
-/* TARJETAS */
-.tarjeta {
+/* ================= TARJETAS ================= */
+
+.tarjeta{
     width:280px;
     background:#181818;
-    border-radius:4px;
+    border-radius:6px;
     overflow:hidden;
-    transition:0.3s;
+    position:relative;
     cursor:pointer;
+    transition:0.3s;
 }
 
-.tarjeta:hover {
-    transform:scale(1.1);
+.tarjeta:hover{
+    transform:scale(1.15);
+    z-index:10;
 }
 
-.contenedor-poster img {
-    width:100%;
+/* POSTER */
+
+.poster{
     height:160px;
+    position:relative;
+}
+
+.poster img,
+.poster video{
+    width:100%;
+    height:100%;
     object-fit:cover;
 }
 
-/* OVERLAYS */
-.overlay {
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.9);
-    z-index:6000;
-    justify-content:center;
-    align-items:center;
+/* HOVER */
+
+.hover{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(to top,black,transparent);
+    opacity:0;
+    transition:0.3s;
+    padding:10px;
 }
 
-/* BOTÓN CERRAR */
-.cerrar {
-    position:fixed;
-    top:20px;
-    right:20px;
-    font-size:40px;
+.tarjeta:hover .hover{
+    opacity:1;
+}
+
+/* BOTONES */
+
+.botones{
+    display:flex;
+    gap:10px;
+}
+
+.btn{
+    padding:8px;
+    border:none;
+    border-radius:4px;
     cursor:pointer;
-    z-index:9999;
 }
 
-/* REPRODUCTOR */
-#reproductor {
+.play{background:white;color:black;}
+.lista{background:rgba(255,255,255,0.2);color:white;}
+.en-lista{background:green !important;}
+
+/* ================= BLOQUEADO ================= */
+
+.bloqueada{
+    opacity:0.5;
+    pointer-events:none;
+}
+
+/* ================= REPRODUCTOR ================= */
+
+#reproductor{
     display:none;
     position:fixed;
     inset:0;
@@ -147,23 +194,37 @@ body {
     z-index:7000;
 }
 
-#videoPeli {
+#videoPeli{
     width:80%;
     max-width:1000px;
 }
+
+.cerrar{
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:40px;
+    cursor:pointer;
+    z-index:9999;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
+<!-- ================= INTRO ================= -->
+
 <div id="intro">
-    <video id="introVideo" muted autoplay playsinline>
+    <video id="introVideo" muted playsinline preload="auto">
         <source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4" type="video/mp4">
     </video>
+
+    <div class="skip" onclick="salirIntro()">Saltar</div>
 </div>
 
-<!-- PERFILES -->
+<!-- ================= PERFILES ================= -->
+
 <div id="perfiles">
     <h1>¿Quién está viendo?</h1>
 
@@ -178,7 +239,8 @@ body {
     </div>
 </div>
 
-<!-- APP -->
+<!-- ================= APP ================= -->
+
 <div id="app" style="display:none;">
 
 <div class="navbar">
@@ -194,11 +256,27 @@ body {
 <h2 id="tituloPeliculas">Películas</h2>
 
 <div id="inicio" class="catalogo">
-    <div class="tarjeta" onclick="reproducir()">
-        <div class="contenedor-poster">
-            <img src="https://archive.org/download/poster_20260428/poster.png">
-        </div>
+
+<div class="tarjeta" data-id="impostor1">
+    <div class="poster">
+        <img src="https://archive.org/download/poster_20260428/poster.png">
     </div>
+
+    <div class="hover">
+        <div class="botones">
+            <button class="btn play" onclick="reproducir()">▶</button>
+            <button class="btn lista" onclick="toggleLista(event,'impostor1')">＋</button>
+        </div>
+        <p>El Impostor</p>
+    </div>
+</div>
+
+<div class="tarjeta bloqueada">
+    <div class="poster">
+        <img src="https://archive.org/download/poster2_202604/poster2.png">
+    </div>
+</div>
+
 </div>
 
 <h2 id="tituloLista" style="display:none;">Mi lista</h2>
@@ -207,66 +285,58 @@ body {
 </div>
 </div>
 
-<!-- REPRODUCTOR -->
+<!-- ================= REPRODUCTOR ================= -->
+
 <div id="reproductor">
     <span class="cerrar" onclick="cerrarVideo()">✕</span>
+
     <video id="videoPeli" controls>
-        <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4" type="video/mp4">
+        <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
     </video>
 </div>
 
 <script>
+
+/* ================= INTRO ================= */
+
 const intro = document.getElementById("intro");
-const introVideo = document.getElementById("introVideo");
-const perfiles = document.getElementById("perfiles");
-const app = document.getElementById("app");
-
-const reproductor = document.getElementById("reproductor");
-const video = document.getElementById("videoPeli");
-
-/* ================= INTRO ROBUSTA ================= */
+const videoIntro = document.getElementById("introVideo");
 
 function salirIntro(){
-    if(!intro) return;
-
     intro.style.opacity="0";
-
     setTimeout(()=>{
         intro.style.display="none";
-        perfiles.style.display="block";
-    },500);
+        document.getElementById("perfiles").style.display="block";
+    },600);
 }
 
-/* Evento normal */
-introVideo.addEventListener("ended", salirIntro);
-
-/* Si falla */
-introVideo.addEventListener("error", salirIntro);
-
-/* Intento de autoplay */
-introVideo.play().catch(()=>{
-    setTimeout(salirIntro,2000);
+/* FIX ARCHIVE */
+videoIntro.addEventListener("canplay",()=>{
+    videoIntro.play().catch(()=>{});
 });
 
-/* FAILSAFE absoluto */
-setTimeout(salirIntro,6000);
+videoIntro.addEventListener("ended",salirIntro);
+videoIntro.addEventListener("error",salirIntro);
 
-/* ================= PERFILES ================= */
+/* FAILSAFE */
+setTimeout(salirIntro,8000);
+
+/* ================= PERFIL ================= */
 
 function entrarPerfil(user){
-    localStorage.setItem("perfil", user);
-
-    perfiles.style.display="none";
-    app.style.display="block";
+    localStorage.setItem("perfil",user);
+    document.getElementById("perfiles").style.display="none";
+    document.getElementById("app").style.display="block";
 }
 
 /* ================= VIDEO ================= */
 
+const reproductor = document.getElementById("reproductor");
+const video = document.getElementById("videoPeli");
+
 function reproducir(){
     reproductor.style.display="flex";
-
-    video.currentTime = 0;
-
+    video.currentTime=0;
     video.play().catch(()=>{});
 }
 
@@ -285,27 +355,79 @@ function mostrarInicio(){
 }
 
 function mostrarLista(){
+    actualizarLista();
     document.getElementById("inicio").style.display="none";
     document.getElementById("miLista").style.display="flex";
     document.getElementById("tituloLista").style.display="block";
     document.getElementById("tituloPeliculas").style.display="none";
 }
 
-/* ================= SEGURIDAD EXTRA ================= */
+/* ================= MI LISTA ================= */
 
-/* ESC cierra video */
+function toggleLista(e,id){
+    e.stopPropagation();
+
+    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+
+    if(lista.includes(id)){
+        lista = lista.filter(x=>x!==id);
+    }else{
+        lista.push(id);
+    }
+
+    localStorage.setItem("miLista",JSON.stringify(lista));
+    actualizarBotones();
+}
+
+function actualizarBotones(){
+    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+
+    document.querySelectorAll(".tarjeta").forEach(t=>{
+        let id = t.dataset.id;
+        let btn = t.querySelector(".lista");
+
+        if(!btn) return;
+
+        if(lista.includes(id)){
+            btn.textContent="✔";
+            btn.classList.add("en-lista");
+        }else{
+            btn.textContent="＋";
+            btn.classList.remove("en-lista");
+        }
+    });
+}
+
+function actualizarLista(){
+    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+    let cont = document.getElementById("miLista");
+
+    cont.innerHTML="";
+
+    lista.forEach(id=>{
+        if(id==="impostor1"){
+            cont.innerHTML += `
+            <div class="tarjeta" onclick="reproducir()">
+                <div class="poster">
+                    <img src="https://archive.org/download/poster_20260428/poster.png">
+                </div>
+            </div>`;
+        }
+    });
+}
+
+actualizarBotones();
+
+/* ================= CIERRES ================= */
+
 window.addEventListener("keydown",(e)=>{
-    if(e.key==="Escape"){
-        cerrarVideo();
-    }
+    if(e.key==="Escape") cerrarVideo();
 });
 
-/* Click fuera cierra */
 reproductor.addEventListener("click",(e)=>{
-    if(e.target===reproductor){
-        cerrarVideo();
-    }
+    if(e.target===reproductor) cerrarVideo();
 });
+
 </script>
 
 </body>
