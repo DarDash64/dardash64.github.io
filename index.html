@@ -3,62 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Ñotflix</title>
 
+<!-- FUENTE -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
 <style>
-body{margin:0;font-family:Arial;background:#141414;color:white}
 
-/* INTRO */
-#intro{position:fixed;inset:0;background:black;display:flex;justify-content:center;align-items:center;z-index:10000;transition:0.5s}
-#intro video{width:100%;height:100%;object-fit:cover}
-.skip{position:absolute;bottom:30px;right:30px;background:rgba(255,255,255,0.2);padding:10px;cursor:pointer}
+/* ================= BASE ================= */
+body{
+    margin:0;
+    font-family:Arial;
+    background:#141414;
+    color:white;
+}
 
-/* PERFILES */
-#perfiles{display:none;position:fixed;inset:0;background:#141414;z-index:9000;text-align:center;padding-top:100px}
-.perfil{display:inline-block;margin:30px;cursor:pointer}
-.perfil img{width:130px;border-radius:10px;transition:0.3s}
-.perfil:hover img{transform:scale(1.1) translateY(-10px);box-shadow:0 10px 30px black}
+/* ================= INTRO ================= */
+#intro{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+    transition:0.5s;
+}
+#intro video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.skip{
+    position:absolute;
+    bottom:30px;
+    right:30px;
+    background:rgba(255,255,255,0.2);
+    padding:10px;
+    cursor:pointer;
+}
 
-/* NAV */
-.navbar{position:fixed;top:0;width:100%;display:flex;justify-content:center;z-index:5000}
-.nav-inner{width:90%;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.8);padding:15px 30px;border-radius:10px}
-.logo{color:#E50914;font-size:2rem}
-.nav-links span{margin-left:20px;cursor:pointer}
+/* ================= PERFILES ================= */
+#perfiles{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#141414;
+    z-index:9000;
+    text-align:center;
+    padding-top:100px;
+}
+.perfil{
+    display:inline-block;
+    margin:30px;
+    cursor:pointer;
+}
+.perfil img{
+    width:130px;
+    border-radius:10px;
+    transition:0.3s;
+}
+.perfil:hover img{
+    transform:scale(1.1) translateY(-10px);
+    box-shadow:0 15px 40px black;
+}
 
-/* CONTENIDO */
-.contenido{padding:120px 40px}
-.catalogo{display:flex;gap:30px}
+/* ================= NAVBAR ================= */
+.navbar{
+    position:fixed;
+    top:0;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    z-index:5000;
+}
+.nav-inner{
+    width:90%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,0.8);
+    padding:15px 30px;
+    border-radius:10px;
+}
+.logo{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:2.5rem;
+    color:#E50914;
+    letter-spacing:2px;
+}
+.nav-links span{
+    margin-left:20px;
+    cursor:pointer;
+}
 
-/* TARJETAS */
-.tarjeta{width:280px;background:#181818;border-radius:6px;overflow:hidden;position:relative;transition:0.3s;cursor:pointer}
-.tarjeta:hover{transform:scale(1.15);z-index:10}
+/* ================= CONTENIDO ================= */
+.contenido{
+    padding:120px 40px;
+}
+.catalogo{
+    display:flex;
+    gap:30px;
+}
 
-.poster img{width:100%;height:160px;object-fit:cover}
+/* ================= TARJETAS ================= */
+.tarjeta{
+    width:280px;
+    background:#181818;
+    border-radius:6px;
+    overflow:hidden;
+    position:relative;
+    transition:0.3s;
+    cursor:pointer;
+}
+.tarjeta:hover{
+    transform:scale(1.15);
+    z-index:10;
+}
 
-.hover{position:absolute;bottom:0;width:100%;background:linear-gradient(to top,black,transparent);opacity:0;transition:0.3s;padding:10px}
-.tarjeta:hover .hover{opacity:1}
+/* POSTER */
+.poster{
+    position:relative;
+    height:160px;
+}
+.poster img, .poster video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
 
-.botones{display:flex;gap:10px}
-.btn{padding:8px;border:none;border-radius:4px;cursor:pointer}
-.play{background:white;color:black}
-.lista{background:rgba(255,255,255,0.2);color:white}
-.info{background:rgba(255,255,255,0.2);color:white}
-.en-lista{background:green}
+/* PREVIEW */
+.preview{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:0.3s;
+}
+.tarjeta:hover .preview{
+    opacity:1;
+}
+
+/* HOVER UI */
+.hover{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:linear-gradient(to top,black,transparent);
+    opacity:0;
+    transition:0.3s;
+    padding:10px;
+}
+.tarjeta:hover .hover{
+    opacity:1;
+}
+
+.botones{
+    display:flex;
+    gap:10px;
+}
+.btn{
+    padding:8px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+.play{background:white;color:black;}
+.lista{background:rgba(255,255,255,0.2);color:white;}
+.info{background:rgba(255,255,255,0.2);color:white;}
+.en-lista{background:green !important;}
 
 /* BLOQUEADO */
-.bloqueada{opacity:0.5;pointer-events:none}
+.bloqueada{
+    opacity:0.5;
+    pointer-events:none;
+}
 
-/* VIDEO */
-#reproductor{display:none;position:fixed;inset:0;background:black;justify-content:center;align-items:center;z-index:7000}
-#videoPeli{width:80%}
-.cerrar{position:absolute;top:20px;right:20px;font-size:40px;cursor:pointer}
+/* ================= REPRODUCTOR ================= */
+#reproductor{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:black;
+    justify-content:center;
+    align-items:center;
+    z-index:7000;
+}
+#videoPeli{
+    width:80%;
+}
+.cerrar{
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:40px;
+    cursor:pointer;
+}
 
-/* INFO */
-#infoModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:8000;padding:50px}
-.menuInfo button{margin:10px;padding:10px;cursor:pointer}
+/* ================= INFO MODAL ================= */
+#infoModal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    z-index:8000;
+    justify-content:center;
+    align-items:center;
+}
+.infoContent{
+    background:#181818;
+    padding:30px;
+    border-radius:10px;
+    width:400px;
+    text-align:center;
+}
+.menuInfo button{
+    margin:10px;
+    padding:10px;
+    cursor:pointer;
+}
 
-/* SAGA */
-#saga{display:none}
+/* ================= SAGA ================= */
+#saga{
+    display:none;
+    margin-top:20px;
+    justify-content:center;
+    gap:20px;
+}
+
 </style>
 </head>
 
@@ -106,10 +278,16 @@ body{margin:0;font-family:Arial;background:#141414;color:white}
 
 <div id="inicio" class="catalogo">
 
-<!-- IMPOSTOR 1 -->
+<!-- IMPOSTOR -->
 <div class="tarjeta" data-id="impostor1">
 <div class="poster">
+
 <img src="https://archive.org/download/poster_20260428/poster.png">
+
+<video class="preview" muted loop>
+<source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
+</video>
+
 </div>
 
 <div class="hover">
@@ -127,7 +305,6 @@ body{margin:0;font-family:Arial;background:#141414;color:white}
 <div class="poster">
 <img src="https://archive.org/download/poster2_202604/poster2.png">
 </div>
-
 <div class="hover">
 <p>El_Impostor 2 la película</p>
 </div>
@@ -151,32 +328,27 @@ body{margin:0;font-family:Arial;background:#141414;color:white}
 
 <!-- INFO -->
 <div id="infoModal">
+<div class="infoContent">
 <span class="cerrar" onclick="cerrarInfo()">✕</span>
 
-<div class="menuInfo">
+<div id="menuInfo">
 <button onclick="reproducir()">▶ Reproducir</button>
-<button onclick="abrirSaga()">Más de esta saga</button>
+<button onclick="mostrarSaga()">Más de esta saga</button>
 </div>
 
-<!-- SAGA -->
-<div id="saga" class="catalogo">
-
+<div id="saga">
 <div class="tarjeta" onclick="reproducir()">
-<div class="poster">
 <img src="https://archive.org/download/poster_20260428/poster.png">
-</div>
 <p>El_Impostor la película</p>
 </div>
 
 <div class="tarjeta bloqueada">
-<div class="poster">
 <img src="https://archive.org/download/poster2_202604/poster2.png">
-</div>
 <p>El_Impostor 2 la película</p>
 </div>
-
 </div>
 
+</div>
 </div>
 
 <script>
@@ -187,50 +359,52 @@ const videoIntro=document.getElementById("introVideo")
 
 function salirIntro(){
 intro.style.opacity="0"
-setTimeout(()=>{intro.style.display="none";document.getElementById("perfiles").style.display="block"},500)
+setTimeout(()=>{intro.style.display="none";perfiles.style.display="block"},500)
 }
-
 videoIntro.addEventListener("canplay",()=>videoIntro.play().catch(()=>{}))
-videoIntro.addEventListener("ended",salirIntro)
 setTimeout(salirIntro,8000)
 
 /* PERFIL */
 function entrarPerfil(){
-document.getElementById("perfiles").style.display="none"
-document.getElementById("app").style.display="block"
+perfiles.style.display="none"
+app.style.display="block"
 }
+
+/* PREVIEW */
+document.querySelectorAll(".tarjeta").forEach(t=>{
+const v=t.querySelector("video")
+if(v){
+t.addEventListener("mouseenter",()=>v.play())
+t.addEventListener("mouseleave",()=>{v.pause();v.currentTime=0})
+}
+})
 
 /* VIDEO */
-const reproductor=document.getElementById("reproductor")
-const video=document.getElementById("videoPeli")
-
 function reproducir(e){
 if(e)e.stopPropagation()
+infoModal.style.display="none"
 reproductor.style.display="flex"
-video.play()
-}
-
-function cerrarVideo(){
-reproductor.style.display="none"
-video.pause()
+videoPeli.play()
 }
 
 /* INFO */
 function abrirInfo(e){
 e.stopPropagation()
-document.getElementById("infoModal").style.display="block"
-document.getElementById("saga").style.display="none"
+infoModal.style.display="flex"
+saga.style.display="none"
+menuInfo.style.display="block"
 }
 
 function cerrarInfo(){
-document.getElementById("infoModal").style.display="none"
+infoModal.style.display="none"
 }
 
-function abrirSaga(){
-document.getElementById("saga").style.display="flex"
+function mostrarSaga(){
+menuInfo.style.display="none"
+saga.style.display="flex"
 }
 
-/* LISTA FUNCIONAL */
+/* LISTA (ARREGLADO) */
 function toggleLista(e,id){
 e.stopPropagation()
 
@@ -243,21 +417,18 @@ lista.push(id)
 }
 
 localStorage.setItem("miLista",JSON.stringify(lista))
-actualizarLista()
+renderLista()
 }
 
-function actualizarLista(){
+function renderLista(){
 let lista=JSON.parse(localStorage.getItem("miLista"))||[]
-let cont=document.getElementById("miLista")
-cont.innerHTML=""
+miLista.innerHTML=""
 
 lista.forEach(id=>{
 if(id==="impostor1"){
-cont.innerHTML+=`
+miLista.innerHTML+=`
 <div class="tarjeta" onclick="reproducir()">
-<div class="poster">
 <img src="https://archive.org/download/poster_20260428/poster.png">
-</div>
 <p>El_Impostor la película</p>
 </div>`
 }
@@ -266,18 +437,24 @@ cont.innerHTML+=`
 
 /* NAV */
 function mostrarInicio(){
-document.getElementById("inicio").style.display="flex"
-document.getElementById("miLista").style.display="none"
-document.getElementById("tituloLista").style.display="none"
-document.getElementById("tituloPeliculas").style.display="block"
+inicio.style.display="flex"
+miLista.style.display="none"
+tituloLista.style.display="none"
+tituloPeliculas.style.display="block"
 }
 
 function mostrarLista(){
-actualizarLista()
-document.getElementById("inicio").style.display="none"
-document.getElementById("miLista").style.display="flex"
-document.getElementById("tituloLista").style.display="block"
-document.getElementById("tituloPeliculas").style.display="none"
+renderLista()
+inicio.style.display="none"
+miLista.style.display="flex"
+tituloLista.style.display="block"
+tituloPeliculas.style.display="none"
+}
+
+/* CERRAR */
+function cerrarVideo(){
+reproductor.style.display="none"
+videoPeli.pause()
 }
 
 </script>
