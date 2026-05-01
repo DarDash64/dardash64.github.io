@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Ñotflix</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -28,20 +27,23 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index:10000;
-transition:0.5s;
+transition:opacity 0.5s;
 }
+
 #intro video{
 width:100%;
 height:100%;
 object-fit:cover;
 }
+
 .skip{
 position:absolute;
 bottom:30px;
 right:30px;
 background:rgba(255,255,255,0.2);
-padding:10px;
+padding:10px 20px;
 cursor:pointer;
+border-radius:6px;
 }
 
 /* ================= PERFILES ================= */
@@ -54,22 +56,25 @@ z-index:9000;
 text-align:center;
 padding-top:100px;
 }
+
 .perfil{
 display:inline-block;
 margin:30px;
 cursor:pointer;
 }
+
 .perfil img{
 width:130px;
 border-radius:10px;
 transition:0.3s;
 }
+
 .perfil:hover img{
 transform:scale(1.1) translateY(-10px);
 box-shadow:0 15px 40px black;
 }
 
-/* ================= NAVBAR ================= */
+/* ================= NAV ================= */
 .navbar{
 position:fixed;
 top:0;
@@ -78,6 +83,7 @@ display:flex;
 justify-content:center;
 z-index:5000;
 }
+
 .nav-inner{
 width:90%;
 display:flex;
@@ -87,11 +93,13 @@ background:rgba(0,0,0,0.8);
 padding:15px 30px;
 border-radius:10px;
 }
+
 .logo{
 font-family:'Bebas Neue';
 font-size:2.5rem;
 color:#E50914;
 }
+
 .nav-links span{
 margin-left:20px;
 cursor:pointer;
@@ -101,6 +109,7 @@ cursor:pointer;
 .contenido{
 padding:120px 40px;
 }
+
 .catalogo{
 display:flex;
 gap:30px;
@@ -117,6 +126,7 @@ position:relative;
 transition:0.3s;
 cursor:pointer;
 }
+
 .tarjeta:hover{
 transform:scale(1.15);
 z-index:10;
@@ -126,6 +136,7 @@ z-index:10;
 height:160px;
 position:relative;
 }
+
 .poster img,
 .poster video{
 width:100%;
@@ -139,6 +150,7 @@ inset:0;
 opacity:0;
 transition:0.3s;
 }
+
 .tarjeta:hover .preview{
 opacity:1;
 }
@@ -152,6 +164,7 @@ opacity:0;
 transition:0.3s;
 padding:10px;
 }
+
 .tarjeta:hover .hover{
 opacity:1;
 }
@@ -160,18 +173,20 @@ opacity:1;
 display:flex;
 gap:10px;
 }
+
 .btn{
 padding:8px;
 border:none;
 border-radius:4px;
 cursor:pointer;
 }
+
 .play{background:white;color:black;}
 .lista{background:rgba(255,255,255,0.2);color:white;}
 .info{background:rgba(255,255,255,0.2);color:white;}
 .en-lista{background:green}
 
-/* BLOQUEADO */
+/* BLOQUEADA */
 .bloqueada{
 opacity:0.5;
 pointer-events:none;
@@ -187,18 +202,22 @@ justify-content:center;
 align-items:center;
 z-index:7000;
 }
+
 #videoPeli{
 width:80%;
+max-width:1000px;
 }
+
 .cerrar{
 position:absolute;
 top:20px;
-right:20px;
+right:30px;
 font-size:40px;
 cursor:pointer;
+z-index:9999;
 }
 
-/* ================= MODAL ================= */
+/* ================= INFO ================= */
 #infoModal{
 display:none;
 position:fixed;
@@ -208,19 +227,34 @@ z-index:8000;
 justify-content:center;
 align-items:center;
 }
+
 .infoBox{
 background:#181818;
 padding:30px;
 border-radius:10px;
-text-align:center;
 width:500px;
+text-align:center;
 }
 
+.menuInfo button{
+margin:10px;
+padding:10px;
+cursor:pointer;
+}
+
+/* SAGA */
 #saga{
 display:none;
 margin-top:20px;
-justify-content:center;
 gap:20px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.volver{
+margin-top:20px;
+cursor:pointer;
+color:#E50914;
 }
 
 </style>
@@ -230,7 +264,7 @@ gap:20px;
 
 <!-- INTRO -->
 <div id="intro">
-<video id="introVideo" muted playsinline>
+<video id="introVideo" muted playsinline preload="auto">
 <source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4">
 </video>
 <div class="skip" onclick="salirIntro()">Saltar</div>
@@ -279,21 +313,22 @@ gap:20px;
 <!-- VIDEO -->
 <div id="reproductor">
 <span class="cerrar" onclick="cerrarVideo()">✕</span>
-<video id="videoPeli" controls>
-<source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
-</video>
+<video id="videoPeli" controls></video>
 </div>
 
 <!-- INFO -->
 <div id="infoModal">
 <div class="infoBox">
 
+<span class="cerrar" onclick="cerrarInfo()">✕</span>
+
 <div id="menuInfo">
-<button onclick="reproducir()">▶ Reproducir</button>
+<button onclick="playDesdeInfo()">▶ Reproducir</button>
 <button onclick="mostrarSaga()">Más de esta saga</button>
 </div>
 
-<div id="saga" class="catalogo"></div>
+<div id="saga"></div>
+<div class="volver" onclick="volverMenu()">← Volver</div>
 
 </div>
 </div>
@@ -301,7 +336,7 @@ gap:20px;
 <script>
 
 /* ================= DATA ================= */
-const peliculas = [
+const peliculas=[
 {
 id:"impostor1",
 titulo:"El_Impostor la película",
@@ -317,12 +352,27 @@ bloqueada:true
 }
 ]
 
-/* ================= INTRO ================= */
+let peliActual=null
+
+/* ================= INTRO ROBUSTA ================= */
+const introVideo=document.getElementById("introVideo")
+
+introVideo.addEventListener("canplay",()=>{
+introVideo.play().catch(()=>{})
+})
+
+introVideo.addEventListener("ended",salirIntro)
+introVideo.addEventListener("error",salirIntro)
+
+setTimeout(salirIntro,8000)
+
 function salirIntro(){
+intro.style.opacity="0"
+setTimeout(()=>{
 intro.style.display="none"
 perfiles.style.display="block"
+},500)
 }
-setTimeout(salirIntro,8000)
 
 /* ================= PERFIL ================= */
 function entrarPerfil(){
@@ -332,16 +382,15 @@ renderInicio()
 }
 
 /* ================= CREAR TARJETA ================= */
-function crearTarjeta(peli){
+function crearTarjeta(p){
+let d=document.createElement("div")
+d.className="tarjeta"
+if(p.bloqueada) d.classList.add("bloqueada")
 
-let div=document.createElement("div")
-div.className="tarjeta"
-if(peli.bloqueada) div.classList.add("bloqueada")
-
-div.innerHTML=`
+d.innerHTML=`
 <div class="poster">
-<img src="${peli.img}">
-${peli.preview?`<video class="preview" muted loop src="${peli.preview}"></video>`:""}
+<img src="${p.img}">
+${p.preview?`<video class="preview" muted loop src="${p.preview}"></video>`:""}
 </div>
 
 <div class="hover">
@@ -350,46 +399,41 @@ ${peli.preview?`<video class="preview" muted loop src="${peli.preview}"></video>
 <button class="btn lista">＋</button>
 <button class="btn info">Más info</button>
 </div>
-<p>${peli.titulo}</p>
+<p>${p.titulo}</p>
 </div>
 `
 
-/* EVENTOS */
-if(!peli.bloqueada){
+if(!p.bloqueada){
 
-div.querySelector(".play").onclick=(e)=>{
+d.querySelector(".play").onclick=(e)=>{
 e.stopPropagation()
-reproducir(peli.video)
+reproducir(p.video)
 }
 
-div.querySelector(".info").onclick=(e)=>{
+d.querySelector(".info").onclick=(e)=>{
 e.stopPropagation()
-abrirInfo(peli)
+abrirInfo(p)
 }
 
-div.querySelector(".lista").onclick=(e)=>{
+d.querySelector(".lista").onclick=(e)=>{
 e.stopPropagation()
-toggleLista(peli.id)
+toggleLista(p.id)
 }
 
-/* PREVIEW */
-let v=div.querySelector("video")
+let v=d.querySelector("video")
 if(v){
-div.onmouseenter=()=>v.play()
-div.onmouseleave=()=>{v.pause();v.currentTime=0}
+d.onmouseenter=()=>v.play()
+d.onmouseleave=()=>{v.pause();v.currentTime=0}
+}
 }
 
-}
-
-return div
+return d
 }
 
 /* ================= RENDER ================= */
 function renderInicio(){
 inicio.innerHTML=""
-peliculas.forEach(p=>{
-inicio.appendChild(crearTarjeta(p))
-})
+peliculas.forEach(p=>inicio.appendChild(crearTarjeta(p)))
 }
 
 /* ================= LISTA ================= */
@@ -403,18 +447,14 @@ lista.push(id)
 }
 
 localStorage.setItem("miLista",JSON.stringify(lista))
-renderLista()
 }
 
 function renderLista(){
 miLista.innerHTML=""
 let lista=JSON.parse(localStorage.getItem("miLista"))||[]
-
 lista.forEach(id=>{
-let peli=peliculas.find(p=>p.id===id)
-if(peli){
-miLista.appendChild(crearTarjeta(peli))
-}
+let p=peliculas.find(x=>x.id===id)
+if(p) miLista.appendChild(crearTarjeta(p))
 })
 }
 
@@ -438,22 +478,23 @@ tituloPeliculas.style.display="none"
 function reproducir(src){
 videoPeli.src=src
 reproductor.style.display="flex"
-videoPeli.play()
-infoModal.style.display="none"
+videoPeli.play().catch(()=>{})
 }
 
-function cerrarVideo(){
-reproductor.style.display="none"
-videoPeli.pause()
+function playDesdeInfo(){
+if(peliActual) reproducir(peliActual.video)
 }
 
 /* ================= INFO ================= */
-function abrirInfo(peli){
+function abrirInfo(p){
+peliActual=p
 infoModal.style.display="flex"
 menuInfo.style.display="block"
 saga.style.display="none"
+}
 
-infoModal.dataset.id=peli.id
+function cerrarInfo(){
+infoModal.style.display="none"
 }
 
 function mostrarSaga(){
@@ -464,6 +505,17 @@ saga.innerHTML=""
 peliculas.forEach(p=>{
 saga.appendChild(crearTarjeta(p))
 })
+}
+
+function volverMenu(){
+saga.style.display="none"
+menuInfo.style.display="block"
+}
+
+/* ================= CIERRE VIDEO ================= */
+function cerrarVideo(){
+reproductor.style.display="none"
+videoPeli.pause()
 }
 
 </script>
