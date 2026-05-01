@@ -8,16 +8,20 @@
 <style>
 body { background:#141414; color:white; font-family:Arial; margin:0; }
 
-/* NAVBAR */
+/* NAVBAR (ARREGLADA) */
 .navbar {
     position:fixed;
     top:0;
+    left:0;
     width:100%;
     background:rgba(0,0,0,0.8);
     padding:15px 40px;
+
     display:flex;
     justify-content:space-between;
     align-items:center;
+
+    box-sizing:border-box; /* 🔥 FIX */
     z-index:5000;
 }
 
@@ -28,10 +32,9 @@ body { background:#141414; color:white; font-family:Arial; margin:0; }
 
 h2 { color:#E5E5E5; }
 
-/* CATÁLOGO */
+/* TARJETAS */
 .catalogo { display:flex; gap:30px; flex-wrap:wrap; }
 
-/* TARJETAS */
 .tarjeta {
     position:relative;
     width:280px;
@@ -79,7 +82,7 @@ h2 { color:#E5E5E5; }
     position:fixed;
     inset:0;
     background:rgba(0,0,0,0.9);
-    z-index:2000;
+    z-index:6000; /* 🔥 por encima de navbar */
     justify-content:center;
     align-items:center;
     flex-direction:column;
@@ -106,12 +109,14 @@ h2 { color:#E5E5E5; }
 .play-btn { background:white; color:black; }
 .extra-btn { background:rgba(255,255,255,0.2); color:white; }
 
+/* ❌ BOTÓN CERRAR (FIX TOTAL) */
 .cerrar {
-    position:absolute;
+    position:fixed; /* 🔥 antes absolute */
     top:20px;
-    right:40px;
+    right:20px;
     font-size:40px;
     cursor:pointer;
+    z-index:9999; /* 🔥 por encima de TODO */
 }
 
 /* REPRODUCTOR */
@@ -122,7 +127,7 @@ h2 { color:#E5E5E5; }
     background:black;
     justify-content:center;
     align-items:center;
-    z-index:3000;
+    z-index:7000;
 }
 
 video { max-width:80%; }
@@ -168,7 +173,6 @@ video { max-width:80%; }
 
 <div id="inicio" class="catalogo">
 
-<!-- IMPOSTOR 1 -->
 <div class="tarjeta" data-id="impostor1">
     <div class="contenedor-poster">
         <img id="img1" src="https://archive.org/download/poster_20260428/poster.png">
@@ -187,7 +191,6 @@ video { max-width:80%; }
     </div>
 </div>
 
-<!-- IMPOSTOR 2 -->
 <div class="tarjeta bloqueada" data-id="impostor2">
     <div class="contenedor-poster">
         <img src="https://archive.org/download/poster2_202604/poster2.png">
@@ -196,7 +199,6 @@ video { max-width:80%; }
 
 </div>
 
-<!-- MI LISTA -->
 <h2 id="tituloLista" style="display:none;">Mi lista</h2>
 <div id="miLista" class="catalogo" style="display:none;"></div>
 
