@@ -6,197 +6,59 @@
 <title>Ñotflix</title>
 
 <style>
+body{margin:0;font-family:Arial;background:#141414;color:white}
 
-/* ================= BASE ================= */
-body{
-    margin:0;
-    font-family:Arial;
-    background:#141414;
-    color:white;
-}
+/* INTRO */
+#intro{position:fixed;inset:0;background:black;display:flex;justify-content:center;align-items:center;z-index:10000;transition:0.5s}
+#intro video{width:100%;height:100%;object-fit:cover}
+.skip{position:absolute;bottom:30px;right:30px;background:rgba(255,255,255,0.2);padding:10px;cursor:pointer}
 
-/* ================= INTRO ================= */
-#intro{
-    position:fixed;
-    inset:0;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:10000;
-    transition:opacity 0.6s;
-}
+/* PERFILES */
+#perfiles{display:none;position:fixed;inset:0;background:#141414;z-index:9000;text-align:center;padding-top:100px}
+.perfil{display:inline-block;margin:30px;cursor:pointer}
+.perfil img{width:130px;border-radius:10px;transition:0.3s}
+.perfil:hover img{transform:scale(1.1) translateY(-10px);box-shadow:0 10px 30px black}
 
-#intro video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
+/* NAV */
+.navbar{position:fixed;top:0;width:100%;display:flex;justify-content:center;z-index:5000}
+.nav-inner{width:90%;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.8);padding:15px 30px;border-radius:10px}
+.logo{color:#E50914;font-size:2rem}
+.nav-links span{margin-left:20px;cursor:pointer}
 
-.skip{
-    position:absolute;
-    bottom:30px;
-    right:30px;
-    background:rgba(255,255,255,0.2);
-    padding:10px 20px;
-    cursor:pointer;
-}
+/* CONTENIDO */
+.contenido{padding:120px 40px}
+.catalogo{display:flex;gap:30px}
 
-/* ================= PERFILES ================= */
-#perfiles{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:#141414;
-    z-index:9000;
-    text-align:center;
-    padding-top:100px;
-}
+/* TARJETAS */
+.tarjeta{width:280px;background:#181818;border-radius:6px;overflow:hidden;position:relative;transition:0.3s;cursor:pointer}
+.tarjeta:hover{transform:scale(1.15);z-index:10}
 
-.perfil{
-    display:inline-block;
-    margin:30px;
-    cursor:pointer;
-}
+.poster img{width:100%;height:160px;object-fit:cover}
 
-.perfil img{
-    width:130px;
-    border-radius:10px;
-}
+.hover{position:absolute;bottom:0;width:100%;background:linear-gradient(to top,black,transparent);opacity:0;transition:0.3s;padding:10px}
+.tarjeta:hover .hover{opacity:1}
 
-/* ================= NAVBAR ================= */
-.navbar{
-    position:fixed;
-    top:0;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    z-index:5000;
-}
+.botones{display:flex;gap:10px}
+.btn{padding:8px;border:none;border-radius:4px;cursor:pointer}
+.play{background:white;color:black}
+.lista{background:rgba(255,255,255,0.2);color:white}
+.info{background:rgba(255,255,255,0.2);color:white}
+.en-lista{background:green}
 
-.nav-inner{
-    width:90%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:rgba(0,0,0,0.8);
-    padding:15px 30px;
-    border-radius:10px;
-}
+/* BLOQUEADO */
+.bloqueada{opacity:0.5;pointer-events:none}
 
-.logo{
-    color:#E50914;
-    font-size:2rem;
-    font-weight:bold;
-}
+/* VIDEO */
+#reproductor{display:none;position:fixed;inset:0;background:black;justify-content:center;align-items:center;z-index:7000}
+#videoPeli{width:80%}
+.cerrar{position:absolute;top:20px;right:20px;font-size:40px;cursor:pointer}
 
-.nav-links span{
-    margin-left:20px;
-    cursor:pointer;
-}
+/* INFO */
+#infoModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:8000;padding:50px}
+.menuInfo button{margin:10px;padding:10px;cursor:pointer}
 
-/* ================= CONTENIDO ================= */
-.contenido{
-    padding:120px 40px;
-}
-
-.catalogo{
-    display:flex;
-    gap:30px;
-}
-
-/* ================= TARJETAS ================= */
-.tarjeta{
-    width:280px;
-    background:#181818;
-    border-radius:6px;
-    overflow:hidden;
-    position:relative;
-    transition:0.3s;
-    cursor:pointer;
-}
-
-.tarjeta:hover{
-    transform:scale(1.15);
-    z-index:10;
-}
-
-.poster{
-    height:160px;
-}
-
-.poster img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-/* HOVER */
-.hover{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    background:linear-gradient(to top,black,transparent);
-    opacity:0;
-    transition:0.3s;
-    padding:10px;
-}
-
-.tarjeta:hover .hover{
-    opacity:1;
-}
-
-.botones{
-    display:flex;
-    gap:10px;
-}
-
-.btn{
-    padding:8px;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-}
-
-.play{background:white;color:black;}
-.lista{background:rgba(255,255,255,0.2);color:white;}
-.info{background:rgba(255,255,255,0.2);color:white;}
-
-.en-lista{background:green !important;}
-
-/* ================= REPRODUCTOR ================= */
-#reproductor{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:black;
-    justify-content:center;
-    align-items:center;
-    z-index:7000;
-}
-
-#videoPeli{
-    width:80%;
-}
-
-.cerrar{
-    position:absolute;
-    top:20px;
-    right:20px;
-    font-size:40px;
-    cursor:pointer;
-}
-
-/* ================= INFO MODAL ================= */
-#infoModal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.9);
-    z-index:8000;
-    padding:50px;
-}
-
+/* SAGA */
+#saga{display:none}
 </style>
 </head>
 
@@ -204,38 +66,38 @@ body{
 
 <!-- INTRO -->
 <div id="intro">
-    <video id="introVideo" muted playsinline preload="auto">
-        <source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4">
-    </video>
-    <div class="skip" onclick="salirIntro()">Saltar</div>
+<video id="introVideo" muted playsinline preload="auto">
+<source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4">
+</video>
+<div class="skip" onclick="salirIntro()">Saltar</div>
 </div>
 
 <!-- PERFILES -->
 <div id="perfiles">
-    <h1>¿Quién está viendo?</h1>
+<h1>¿Quién está viendo?</h1>
 
-    <div class="perfil" onclick="entrarPerfil()">
-        <img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg">
-        <p>Perfil 1</p>
-    </div>
+<div class="perfil" onclick="entrarPerfil()">
+<img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg">
+<p>Perfil 1</p>
+</div>
 
-    <div class="perfil" onclick="entrarPerfil()">
-        <img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_202605/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_thumb.jpg">
-        <p>Perfil 2</p>
-    </div>
+<div class="perfil" onclick="entrarPerfil()">
+<img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_202605/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_thumb.jpg">
+<p>Perfil 2</p>
+</div>
 </div>
 
 <!-- APP -->
-<div id="app" style="display:none;">
+<div id="app" style="display:none">
 
 <div class="navbar">
-    <div class="nav-inner">
-        <div class="logo">ÑOTFLIX</div>
-        <div class="nav-links">
-            <span onclick="mostrarInicio()">Inicio</span>
-            <span onclick="mostrarLista()">Mi lista</span>
-        </div>
-    </div>
+<div class="nav-inner">
+<div class="logo">ÑOTFLIX</div>
+<div class="nav-links">
+<span onclick="mostrarInicio()">Inicio</span>
+<span onclick="mostrarLista()">Mi lista</span>
+</div>
+</div>
 </div>
 
 <div class="contenido">
@@ -244,117 +106,178 @@ body{
 
 <div id="inicio" class="catalogo">
 
+<!-- IMPOSTOR 1 -->
 <div class="tarjeta" data-id="impostor1">
-    <div class="poster">
-        <img src="https://archive.org/download/poster_20260428/poster.png">
-    </div>
+<div class="poster">
+<img src="https://archive.org/download/poster_20260428/poster.png">
+</div>
 
-    <div class="hover">
-        <div class="botones">
-            <button class="btn play" onclick="reproducir(event)">▶</button>
-            <button class="btn lista" onclick="toggleLista(event,'impostor1')">＋</button>
-            <button class="btn info" onclick="abrirInfo(event)">i</button>
-        </div>
-        <p>El Impostor</p>
-    </div>
+<div class="hover">
+<div class="botones">
+<button class="btn play" onclick="reproducir(event)">▶</button>
+<button class="btn lista" onclick="toggleLista(event,'impostor1')">＋</button>
+<button class="btn info" onclick="abrirInfo(event)">Más info</button>
+</div>
+<p>El_Impostor la película</p>
+</div>
+</div>
+
+<!-- IMPOSTOR 2 -->
+<div class="tarjeta bloqueada">
+<div class="poster">
+<img src="https://archive.org/download/poster2_202604/poster2.png">
+</div>
+
+<div class="hover">
+<p>El_Impostor 2 la película</p>
+</div>
 </div>
 
 </div>
 
-<h2 id="tituloLista" style="display:none;">Mi lista</h2>
-<div id="miLista" class="catalogo" style="display:none;"></div>
+<h2 id="tituloLista" style="display:none">Mi lista</h2>
+<div id="miLista" class="catalogo" style="display:none"></div>
 
 </div>
 </div>
 
-<!-- REPRODUCTOR -->
+<!-- VIDEO -->
 <div id="reproductor">
-    <span class="cerrar" onclick="cerrarVideo()">✕</span>
-    <video id="videoPeli" controls>
-        <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
-    </video>
+<span class="cerrar" onclick="cerrarVideo()">✕</span>
+<video id="videoPeli" controls>
+<source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
+</video>
 </div>
 
 <!-- INFO -->
 <div id="infoModal">
-    <span class="cerrar" onclick="cerrarInfo()">✕</span>
-    <h1>El Impostor</h1>
-    <p>Película casera épica tipo Among Us 🚀</p>
+<span class="cerrar" onclick="cerrarInfo()">✕</span>
+
+<div class="menuInfo">
+<button onclick="reproducir()">▶ Reproducir</button>
+<button onclick="abrirSaga()">Más de esta saga</button>
+</div>
+
+<!-- SAGA -->
+<div id="saga" class="catalogo">
+
+<div class="tarjeta" onclick="reproducir()">
+<div class="poster">
+<img src="https://archive.org/download/poster_20260428/poster.png">
+</div>
+<p>El_Impostor la película</p>
+</div>
+
+<div class="tarjeta bloqueada">
+<div class="poster">
+<img src="https://archive.org/download/poster2_202604/poster2.png">
+</div>
+<p>El_Impostor 2 la película</p>
+</div>
+
+</div>
+
 </div>
 
 <script>
 
 /* INTRO */
-const intro = document.getElementById("intro");
-const videoIntro = document.getElementById("introVideo");
+const intro=document.getElementById("intro")
+const videoIntro=document.getElementById("introVideo")
 
 function salirIntro(){
-    intro.style.opacity="0";
-    setTimeout(()=>{
-        intro.style.display="none";
-        document.getElementById("perfiles").style.display="block";
-    },600);
+intro.style.opacity="0"
+setTimeout(()=>{intro.style.display="none";document.getElementById("perfiles").style.display="block"},500)
 }
 
-videoIntro.addEventListener("canplay",()=>videoIntro.play().catch(()=>{}));
-videoIntro.addEventListener("ended",salirIntro);
-setTimeout(salirIntro,8000);
+videoIntro.addEventListener("canplay",()=>videoIntro.play().catch(()=>{}))
+videoIntro.addEventListener("ended",salirIntro)
+setTimeout(salirIntro,8000)
 
 /* PERFIL */
 function entrarPerfil(){
-    document.getElementById("perfiles").style.display="none";
-    document.getElementById("app").style.display="block";
+document.getElementById("perfiles").style.display="none"
+document.getElementById("app").style.display="block"
 }
 
 /* VIDEO */
-const reproductor = document.getElementById("reproductor");
-const video = document.getElementById("videoPeli");
+const reproductor=document.getElementById("reproductor")
+const video=document.getElementById("videoPeli")
 
 function reproducir(e){
-    e.stopPropagation();
-    reproductor.style.display="flex";
-    video.play();
+if(e)e.stopPropagation()
+reproductor.style.display="flex"
+video.play()
 }
 
 function cerrarVideo(){
-    reproductor.style.display="none";
-    video.pause();
+reproductor.style.display="none"
+video.pause()
 }
 
 /* INFO */
 function abrirInfo(e){
-    e.stopPropagation();
-    document.getElementById("infoModal").style.display="block";
+e.stopPropagation()
+document.getElementById("infoModal").style.display="block"
+document.getElementById("saga").style.display="none"
 }
 
 function cerrarInfo(){
-    document.getElementById("infoModal").style.display="none";
+document.getElementById("infoModal").style.display="none"
 }
 
-/* LISTA */
+function abrirSaga(){
+document.getElementById("saga").style.display="flex"
+}
+
+/* LISTA FUNCIONAL */
 function toggleLista(e,id){
-    e.stopPropagation();
+e.stopPropagation()
 
-    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
+let lista=JSON.parse(localStorage.getItem("miLista"))||[]
 
-    if(lista.includes(id)){
-        lista = lista.filter(x=>x!==id);
-    }else{
-        lista.push(id);
-    }
+if(lista.includes(id)){
+lista=lista.filter(x=>x!==id)
+}else{
+lista.push(id)
+}
 
-    localStorage.setItem("miLista",JSON.stringify(lista));
+localStorage.setItem("miLista",JSON.stringify(lista))
+actualizarLista()
+}
+
+function actualizarLista(){
+let lista=JSON.parse(localStorage.getItem("miLista"))||[]
+let cont=document.getElementById("miLista")
+cont.innerHTML=""
+
+lista.forEach(id=>{
+if(id==="impostor1"){
+cont.innerHTML+=`
+<div class="tarjeta" onclick="reproducir()">
+<div class="poster">
+<img src="https://archive.org/download/poster_20260428/poster.png">
+</div>
+<p>El_Impostor la película</p>
+</div>`
+}
+})
 }
 
 /* NAV */
 function mostrarInicio(){
-    document.getElementById("inicio").style.display="flex";
-    document.getElementById("miLista").style.display="none";
+document.getElementById("inicio").style.display="flex"
+document.getElementById("miLista").style.display="none"
+document.getElementById("tituloLista").style.display="none"
+document.getElementById("tituloPeliculas").style.display="block"
 }
 
 function mostrarLista(){
-    document.getElementById("inicio").style.display="none";
-    document.getElementById("miLista").style.display="flex";
+actualizarLista()
+document.getElementById("inicio").style.display="none"
+document.getElementById("miLista").style.display="flex"
+document.getElementById("tituloLista").style.display="block"
+document.getElementById("tituloPeliculas").style.display="none"
 }
 
 </script>
