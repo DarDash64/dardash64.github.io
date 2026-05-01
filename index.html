@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Ñotflix</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -234,6 +235,7 @@ padding:30px;
 border-radius:10px;
 width:500px;
 text-align:center;
+position:relative;
 }
 
 .menuInfo button{
@@ -251,10 +253,11 @@ flex-wrap:wrap;
 justify-content:center;
 }
 
-.volver{
-margin-top:20px;
-cursor:pointer;
-color:#E50914;
+/* overlay click */
+.overlayClose{
+position:absolute;
+inset:0;
+z-index:-1;
 }
 
 </style>
@@ -317,7 +320,7 @@ color:#E50914;
 </div>
 
 <!-- INFO -->
-<div id="infoModal">
+<div id="infoModal" onclick="cerrarInfoClick(event)">
 <div class="infoBox">
 
 <span class="cerrar" onclick="cerrarInfo()">✕</span>
@@ -328,7 +331,6 @@ color:#E50914;
 </div>
 
 <div id="saga"></div>
-<div class="volver" onclick="volverMenu()">← Volver</div>
 
 </div>
 </div>
@@ -354,16 +356,12 @@ bloqueada:true
 
 let peliActual=null
 
-/* ================= INTRO ROBUSTA ================= */
+/* ================= INTRO ================= */
 const introVideo=document.getElementById("introVideo")
 
-introVideo.addEventListener("canplay",()=>{
-introVideo.play().catch(()=>{})
-})
-
+introVideo.addEventListener("canplay",()=>introVideo.play().catch(()=>{}))
 introVideo.addEventListener("ended",salirIntro)
 introVideo.addEventListener("error",salirIntro)
-
 setTimeout(salirIntro,8000)
 
 function salirIntro(){
@@ -381,11 +379,11 @@ app.style.display="block"
 renderInicio()
 }
 
-/* ================= CREAR TARJETA ================= */
+/* ================= TARJETAS ================= */
 function crearTarjeta(p){
 let d=document.createElement("div")
 d.className="tarjeta"
-if(p.bloqueada) d.classList.add("bloqueada")
+if(p.bloqueada)d.classList.add("bloqueada")
 
 d.innerHTML=`
 <div class="poster">
@@ -476,13 +474,16 @@ tituloPeliculas.style.display="none"
 
 /* ================= VIDEO ================= */
 function reproducir(src){
+infoModal.style.display="none"
 videoPeli.src=src
 reproductor.style.display="flex"
 videoPeli.play().catch(()=>{})
 }
 
 function playDesdeInfo(){
-if(peliActual) reproducir(peliActual.video)
+if(peliActual){
+reproducir(peliActual.video)
+}
 }
 
 /* ================= INFO ================= */
@@ -497,6 +498,12 @@ function cerrarInfo(){
 infoModal.style.display="none"
 }
 
+function cerrarInfoClick(e){
+if(e.target.id==="infoModal"){
+cerrarInfo()
+}
+}
+
 function mostrarSaga(){
 menuInfo.style.display="none"
 saga.style.display="flex"
@@ -507,12 +514,7 @@ saga.appendChild(crearTarjeta(p))
 })
 }
 
-function volverMenu(){
-saga.style.display="none"
-menuInfo.style.display="block"
-}
-
-/* ================= CIERRE VIDEO ================= */
+/* ================= VIDEO CLOSE ================= */
 function cerrarVideo(){
 reproductor.style.display="none"
 videoPeli.pause()
