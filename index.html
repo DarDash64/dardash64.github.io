@@ -8,16 +8,14 @@
 <style>
 
 /* ================= BASE ================= */
-
 body{
     margin:0;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial;
     background:#141414;
     color:white;
 }
 
 /* ================= INTRO ================= */
-
 #intro{
     position:fixed;
     inset:0;
@@ -41,12 +39,10 @@ body{
     right:30px;
     background:rgba(255,255,255,0.2);
     padding:10px 20px;
-    border-radius:6px;
     cursor:pointer;
 }
 
 /* ================= PERFILES ================= */
-
 #perfiles{
     display:none;
     position:fixed;
@@ -64,27 +60,28 @@ body{
 }
 
 .perfil img{
-    width:120px;
+    width:130px;
     border-radius:10px;
-    transition:0.3s;
-}
-
-.perfil:hover img{
-    transform:scale(1.1);
 }
 
 /* ================= NAVBAR ================= */
-
 .navbar{
     position:fixed;
     top:0;
     width:100%;
-    background:rgba(0,0,0,0.8);
-    padding:15px 40px;
+    display:flex;
+    justify-content:center;
+    z-index:5000;
+}
+
+.nav-inner{
+    width:90%;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    z-index:5000;
+    background:rgba(0,0,0,0.8);
+    padding:15px 30px;
+    border-radius:10px;
 }
 
 .logo{
@@ -99,27 +96,24 @@ body{
 }
 
 /* ================= CONTENIDO ================= */
-
 .contenido{
-    padding:100px 40px;
+    padding:120px 40px;
 }
 
 .catalogo{
     display:flex;
     gap:30px;
-    flex-wrap:wrap;
 }
 
 /* ================= TARJETAS ================= */
-
 .tarjeta{
     width:280px;
     background:#181818;
     border-radius:6px;
     overflow:hidden;
     position:relative;
-    cursor:pointer;
     transition:0.3s;
+    cursor:pointer;
 }
 
 .tarjeta:hover{
@@ -127,22 +121,17 @@ body{
     z-index:10;
 }
 
-/* POSTER */
-
 .poster{
     height:160px;
-    position:relative;
 }
 
-.poster img,
-.poster video{
+.poster img{
     width:100%;
     height:100%;
     object-fit:cover;
 }
 
 /* HOVER */
-
 .hover{
     position:absolute;
     bottom:0;
@@ -156,8 +145,6 @@ body{
 .tarjeta:hover .hover{
     opacity:1;
 }
-
-/* BOTONES */
 
 .botones{
     display:flex;
@@ -173,17 +160,11 @@ body{
 
 .play{background:white;color:black;}
 .lista{background:rgba(255,255,255,0.2);color:white;}
+.info{background:rgba(255,255,255,0.2);color:white;}
+
 .en-lista{background:green !important;}
 
-/* ================= BLOQUEADO ================= */
-
-.bloqueada{
-    opacity:0.5;
-    pointer-events:none;
-}
-
 /* ================= REPRODUCTOR ================= */
-
 #reproductor{
     display:none;
     position:fixed;
@@ -196,7 +177,6 @@ body{
 
 #videoPeli{
     width:80%;
-    max-width:1000px;
 }
 
 .cerrar{
@@ -205,7 +185,16 @@ body{
     right:20px;
     font-size:40px;
     cursor:pointer;
-    z-index:9999;
+}
+
+/* ================= INFO MODAL ================= */
+#infoModal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    z-index:8000;
+    padding:50px;
 }
 
 </style>
@@ -213,41 +202,39 @@ body{
 
 <body>
 
-<!-- ================= INTRO ================= -->
-
+<!-- INTRO -->
 <div id="intro">
     <video id="introVideo" muted playsinline preload="auto">
-        <source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4" type="video/mp4">
+        <source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4">
     </video>
-
     <div class="skip" onclick="salirIntro()">Saltar</div>
 </div>
 
-<!-- ================= PERFILES ================= -->
-
+<!-- PERFILES -->
 <div id="perfiles">
     <h1>¿Quién está viendo?</h1>
 
-    <div class="perfil" onclick="entrarPerfil('user1')">
-        <img src="https://i.imgur.com/1X6h6XG.png">
-        <p>Usuario 1</p>
+    <div class="perfil" onclick="entrarPerfil()">
+        <img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg">
+        <p>Perfil 1</p>
     </div>
 
-    <div class="perfil" onclick="entrarPerfil('user2')">
-        <img src="https://i.imgur.com/1X6h6XG.png">
-        <p>Usuario 2</p>
+    <div class="perfil" onclick="entrarPerfil()">
+        <img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_202605/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_thumb.jpg">
+        <p>Perfil 2</p>
     </div>
 </div>
 
-<!-- ================= APP ================= -->
-
+<!-- APP -->
 <div id="app" style="display:none;">
 
 <div class="navbar">
-    <div class="logo">ÑOTFLIX</div>
-    <div class="nav-links">
-        <span onclick="mostrarInicio()">Inicio</span>
-        <span onclick="mostrarLista()">Mi lista</span>
+    <div class="nav-inner">
+        <div class="logo">ÑOTFLIX</div>
+        <div class="nav-links">
+            <span onclick="mostrarInicio()">Inicio</span>
+            <span onclick="mostrarLista()">Mi lista</span>
+        </div>
     </div>
 </div>
 
@@ -264,16 +251,11 @@ body{
 
     <div class="hover">
         <div class="botones">
-            <button class="btn play" onclick="reproducir()">▶</button>
+            <button class="btn play" onclick="reproducir(event)">▶</button>
             <button class="btn lista" onclick="toggleLista(event,'impostor1')">＋</button>
+            <button class="btn info" onclick="abrirInfo(event)">i</button>
         </div>
         <p>El Impostor</p>
-    </div>
-</div>
-
-<div class="tarjeta bloqueada">
-    <div class="poster">
-        <img src="https://archive.org/download/poster2_202604/poster2.png">
     </div>
 </div>
 
@@ -285,20 +267,24 @@ body{
 </div>
 </div>
 
-<!-- ================= REPRODUCTOR ================= -->
-
+<!-- REPRODUCTOR -->
 <div id="reproductor">
     <span class="cerrar" onclick="cerrarVideo()">✕</span>
-
     <video id="videoPeli" controls>
         <source src="https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4">
     </video>
 </div>
 
+<!-- INFO -->
+<div id="infoModal">
+    <span class="cerrar" onclick="cerrarInfo()">✕</span>
+    <h1>El Impostor</h1>
+    <p>Película casera épica tipo Among Us 🚀</p>
+</div>
+
 <script>
 
-/* ================= INTRO ================= */
-
+/* INTRO */
 const intro = document.getElementById("intro");
 const videoIntro = document.getElementById("introVideo");
 
@@ -310,34 +296,24 @@ function salirIntro(){
     },600);
 }
 
-/* FIX ARCHIVE */
-videoIntro.addEventListener("canplay",()=>{
-    videoIntro.play().catch(()=>{});
-});
-
+videoIntro.addEventListener("canplay",()=>videoIntro.play().catch(()=>{}));
 videoIntro.addEventListener("ended",salirIntro);
-videoIntro.addEventListener("error",salirIntro);
-
-/* FAILSAFE */
 setTimeout(salirIntro,8000);
 
-/* ================= PERFIL ================= */
-
-function entrarPerfil(user){
-    localStorage.setItem("perfil",user);
+/* PERFIL */
+function entrarPerfil(){
     document.getElementById("perfiles").style.display="none";
     document.getElementById("app").style.display="block";
 }
 
-/* ================= VIDEO ================= */
-
+/* VIDEO */
 const reproductor = document.getElementById("reproductor");
 const video = document.getElementById("videoPeli");
 
-function reproducir(){
+function reproducir(e){
+    e.stopPropagation();
     reproductor.style.display="flex";
-    video.currentTime=0;
-    video.play().catch(()=>{});
+    video.play();
 }
 
 function cerrarVideo(){
@@ -345,25 +321,17 @@ function cerrarVideo(){
     video.pause();
 }
 
-/* ================= NAV ================= */
-
-function mostrarInicio(){
-    document.getElementById("inicio").style.display="flex";
-    document.getElementById("miLista").style.display="none";
-    document.getElementById("tituloLista").style.display="none";
-    document.getElementById("tituloPeliculas").style.display="block";
+/* INFO */
+function abrirInfo(e){
+    e.stopPropagation();
+    document.getElementById("infoModal").style.display="block";
 }
 
-function mostrarLista(){
-    actualizarLista();
-    document.getElementById("inicio").style.display="none";
-    document.getElementById("miLista").style.display="flex";
-    document.getElementById("tituloLista").style.display="block";
-    document.getElementById("tituloPeliculas").style.display="none";
+function cerrarInfo(){
+    document.getElementById("infoModal").style.display="none";
 }
 
-/* ================= MI LISTA ================= */
-
+/* LISTA */
 function toggleLista(e,id){
     e.stopPropagation();
 
@@ -376,57 +344,18 @@ function toggleLista(e,id){
     }
 
     localStorage.setItem("miLista",JSON.stringify(lista));
-    actualizarBotones();
 }
 
-function actualizarBotones(){
-    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
-
-    document.querySelectorAll(".tarjeta").forEach(t=>{
-        let id = t.dataset.id;
-        let btn = t.querySelector(".lista");
-
-        if(!btn) return;
-
-        if(lista.includes(id)){
-            btn.textContent="✔";
-            btn.classList.add("en-lista");
-        }else{
-            btn.textContent="＋";
-            btn.classList.remove("en-lista");
-        }
-    });
+/* NAV */
+function mostrarInicio(){
+    document.getElementById("inicio").style.display="flex";
+    document.getElementById("miLista").style.display="none";
 }
 
-function actualizarLista(){
-    let lista = JSON.parse(localStorage.getItem("miLista")) || [];
-    let cont = document.getElementById("miLista");
-
-    cont.innerHTML="";
-
-    lista.forEach(id=>{
-        if(id==="impostor1"){
-            cont.innerHTML += `
-            <div class="tarjeta" onclick="reproducir()">
-                <div class="poster">
-                    <img src="https://archive.org/download/poster_20260428/poster.png">
-                </div>
-            </div>`;
-        }
-    });
+function mostrarLista(){
+    document.getElementById("inicio").style.display="none";
+    document.getElementById("miLista").style.display="flex";
 }
-
-actualizarBotones();
-
-/* ================= CIERRES ================= */
-
-window.addEventListener("keydown",(e)=>{
-    if(e.key==="Escape") cerrarVideo();
-});
-
-reproductor.addEventListener("click",(e)=>{
-    if(e.target===reproductor) cerrarVideo();
-});
 
 </script>
 
