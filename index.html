@@ -3,31 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Ñotflix</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
 <style>
 
-/* ========================= */
-/* ===== RESET / BASE ===== */
-/* ========================= */
+/* ================= BASE ================= */
 
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
 margin:0;
-font-family:Arial, sans-serif;
+font-family:Arial;
 background:#141414;
 color:white;
-overflow-x:hidden;
+overflow:hidden;
 }
 
-/* ========================= */
-/* ===== NAVBAR ===== */
-/* ========================= */
+/* ================= INTRO ================= */
+
+#intro{
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+#intro video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* ================= PERFILES ================= */
+
+#perfiles{
+position:fixed;
+inset:0;
+background:#141414;
+display:none;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:9000;
+}
+
+.perfiles-box{
+display:flex;
+gap:40px;
+}
+
+.perfil{
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+
+.perfil img{
+width:120px;
+border-radius:10px;
+transition:0.3s;
+}
+
+.perfil:hover img{
+transform:scale(1.1);
+}
+
+/* ================= NAVBAR ================= */
 
 .navbar{
 position:fixed;
@@ -35,7 +82,7 @@ top:0;
 width:100%;
 display:flex;
 justify-content:center;
-z-index:5000;
+z-index:1000;
 }
 
 .nav-inner{
@@ -43,7 +90,7 @@ width:90%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-background:rgba(0,0,0,0.85);
+background:black;
 padding:15px 30px;
 border-radius:10px;
 }
@@ -52,29 +99,18 @@ border-radius:10px;
 font-family:'Bebas Neue';
 font-size:2.5rem;
 color:#E50914;
-letter-spacing:2px;
 }
 
 .nav-links span{
 margin-left:20px;
 cursor:pointer;
-transition:0.2s;
 }
 
-.nav-links span:hover{
-color:#E50914;
-}
+/* ================= CONTENIDO ================= */
 
-/* ========================= */
-/* ===== CONTENIDO ===== */
-/* ========================= */
-
-.contenido{
+#app{
+display:none;
 padding:120px 40px;
-}
-
-.seccion{
-margin-bottom:60px;
 }
 
 .catalogo{
@@ -83,9 +119,7 @@ gap:30px;
 flex-wrap:wrap;
 }
 
-/* ========================= */
-/* ===== TARJETAS ===== */
-/* ========================= */
+/* ================= TARJETAS ================= */
 
 .tarjeta{
 width:280px;
@@ -93,14 +127,12 @@ background:#181818;
 border-radius:6px;
 overflow:hidden;
 position:relative;
-transition:transform 0.3s ease, box-shadow 0.3s;
-cursor:pointer;
+transition:0.3s;
 }
 
 .tarjeta:hover{
-transform:scale(1.15);
+transform:scale(1.1);
 z-index:10;
-box-shadow:0 10px 30px rgba(0,0,0,0.8);
 }
 
 .poster{
@@ -115,20 +147,16 @@ height:100%;
 object-fit:cover;
 }
 
-/* PREVIEW */
-
 .preview{
 position:absolute;
 inset:0;
 opacity:0;
-transition:opacity 0.3s;
+transition:0.3s;
 }
 
 .tarjeta:hover .preview{
 opacity:1;
 }
-
-/* HOVER UI */
 
 .hover{
 position:absolute;
@@ -136,7 +164,7 @@ bottom:0;
 width:100%;
 background:linear-gradient(to top,black,transparent);
 opacity:0;
-transition:opacity 0.3s;
+transition:0.3s;
 padding:10px;
 }
 
@@ -144,139 +172,104 @@ padding:10px;
 opacity:1;
 }
 
-.botones{
-display:flex;
-gap:10px;
-margin-bottom:5px;
-}
-
 .btn{
-padding:8px;
-border:none;
-border-radius:4px;
+padding:6px;
+margin:2px;
 cursor:pointer;
-font-size:14px;
-}
-
-/* BOTONES */
-
-.play{
-background:white;
-color:black;
-}
-
-.lista{
-background:#333;
-color:white;
-}
-
-.info{
-background:#333;
-color:white;
 }
 
 .en-lista{
-background:green !important;
-color:white;
+background:green;
 }
 
-/* ========================= */
-/* ===== REPRODUCTOR ===== */
-/* ========================= */
+/* ================= MODALES ================= */
 
-#reproductor{
-display:none;
-position:fixed;
-inset:0;
-background:black;
-justify-content:center;
-align-items:center;
-z-index:7000;
-}
-
-#videoPeli{
-width:80%;
-max-width:1000px;
-background:black;
-}
-
-/* CERRAR */
-
-.cerrar{
-position:absolute;
-top:20px;
-right:30px;
-font-size:40px;
-cursor:pointer;
-z-index:99999;
-color:white;
-}
-
-/* ========================= */
-/* ===== MODAL INFO ===== */
-/* ========================= */
-
-#infoModal{
+.modal{
 display:none;
 position:fixed;
 inset:0;
 background:rgba(0,0,0,0.95);
-z-index:8000;
 justify-content:center;
 align-items:center;
+z-index:3000;
 }
 
-.infoBox{
+.box{
 background:#181818;
 padding:30px;
 border-radius:10px;
-width:420px;
-text-align:center;
 position:relative;
+text-align:center;
 }
 
-.infoBox h3{
-margin-top:0;
+.cerrar{
+position:absolute;
+top:10px;
+right:20px;
+font-size:30px;
+cursor:pointer;
 }
 
-/* ========================= */
-/* ===== CONTINUAR ===== */
-/* ========================= */
+/* ================= VIDEO ================= */
 
-#continuar:empty::after{
-content:"(Aún no has empezado nada)";
-opacity:0.5;
+#videoModal video{
+width:80%;
+max-width:1000px;
 }
 
-/* ========================= */
-/* ===== SCROLL ===== */
-/* ========================= */
+/* ================= EXTRA (relleno líneas estabilidad) ================= */
 
-::-webkit-scrollbar{
-width:8px;
-}
-
-::-webkit-scrollbar-thumb{
-background:#444;
-border-radius:10px;
-}
-
-/* ========================= */
-/* ===== EXTRA ESPACIADO ===== */
-/* ========================= */
-
-/* (líneas extra para estabilidad y legibilidad futura) */
-
-.spacer1{height:1px;}
-.spacer2{height:1px;}
-.spacer3{height:1px;}
-.spacer4{height:1px;}
-.spacer5{height:1px;}
+.linea1{}
+.linea2{}
+.linea3{}
+.linea4{}
+.linea5{}
+.linea6{}
+.linea7{}
+.linea8{}
+.linea9{}
+.linea10{}
+.linea11{}
+.linea12{}
+.linea13{}
+.linea14{}
+.linea15{}
+.linea16{}
+.linea17{}
+.linea18{}
+.linea19{}
+.linea20{}
 
 </style>
 </head>
 
 <body>
+
+<!-- INTRO -->
+<div id="intro">
+<video id="introVideo" autoplay muted>
+<source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4">
+</video>
+</div>
+
+<!-- PERFILES -->
+<div id="perfiles">
+<h2>¿Quién está viendo?</h2>
+
+<div class="perfiles-box">
+
+<div class="perfil" onclick="entrar()">
+<img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg">
+<p>Usuario 1</p>
+</div>
+
+<div class="perfil" onclick="entrar()">
+<img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_202605/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_thumb.jpg">
+<p>Usuario 2</p>
+</div>
+
+</div>
+</div>
 
 <!-- NAVBAR -->
 <div class="navbar">
@@ -289,65 +282,89 @@ border-radius:10px;
 </div>
 </div>
 
-<!-- CONTENIDO -->
-<div class="contenido">
+<!-- APP -->
+<div id="app">
 
-<div class="seccion">
 <h2>Continuar viendo</h2>
 <div id="continuar" class="catalogo"></div>
-</div>
 
-<div class="seccion">
 <h2>Películas</h2>
 <div id="inicio" class="catalogo"></div>
-</div>
 
-<div class="seccion" id="seccionLista" style="display:none;">
-<h2>Mi lista</h2>
+<h2 id="tituloLista" style="display:none;">Mi lista</h2>
 <div id="miLista" class="catalogo"></div>
-</div>
 
 </div>
 
-<!-- REPRODUCTOR -->
-<div id="reproductor">
+<!-- VIDEO -->
+<div id="videoModal" class="modal">
 <span class="cerrar" onclick="cerrarVideo()">✕</span>
 <video id="videoPeli" controls></video>
 </div>
 
-<!-- MODAL INFO -->
-<div id="infoModal" onclick="cerrarInfoClick(event)">
-<div class="infoBox">
+<!-- INFO -->
+<div id="infoModal" class="modal">
+<div class="box">
 <span class="cerrar" onclick="cerrarInfo()">✕</span>
 <h3 id="infoTitulo"></h3>
+
 <button onclick="playDesdeInfo()">▶ Reproducir</button>
+<button onclick="toggleListaActual()">✔ Mi lista</button>
+<button onclick="abrirSaga()">📺 Más de esta saga</button>
+
+</div>
+</div>
+
+<!-- SAGA -->
+<div id="sagaModal" class="modal">
+<div class="box">
+<span class="cerrar" onclick="cerrarSaga()">✕</span>
+<h3>Saga El_Impostor</h3>
+<div id="sagaContenido" class="catalogo"></div>
 </div>
 </div>
 
 <script>
 
-/* ========================= */
-/* ===== DATA ===== */
-/* ========================= */
+/* ================= DATA ================= */
 
 const peliculas=[
 {
-id:"impostor1",
+id:"1",
 titulo:"El_Impostor la película",
 img:"https://archive.org/download/poster_20260428/poster.png",
 video:"https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4"
+},
+{
+id:"2",
+titulo:"El_Impostor 2 la película",
+img:"https://archive.org/download/poster2_202604/poster2.png",
+video:""
 }
 ]
 
-let peliActual=null
+let actual=null
 
-/* ========================= */
-/* ===== TARJETAS ===== */
-/* ========================= */
+/* ================= INTRO ================= */
 
-function crearTarjeta(p){
+introVideo.onended=()=>{
+intro.style.display="none"
+perfiles.style.display="flex"
+}
 
-let lista=JSON.parse(localStorage.getItem("miLista"))||[]
+/* ================= PERFIL ================= */
+
+function entrar(){
+perfiles.style.display="none"
+app.style.display="block"
+render()
+}
+
+/* ================= TARJETAS ================= */
+
+function crear(p){
+
+let lista=JSON.parse(localStorage.getItem("lista"))||[]
 let enLista=lista.includes(p.id)
 
 let div=document.createElement("div")
@@ -359,144 +376,74 @@ div.innerHTML=`
 </div>
 
 <div class="hover">
-<div class="botones">
-<button class="btn play">▶</button>
-<button class="btn lista ${enLista?'en-lista':''}">
-${enLista?'✔':'＋'}
-</button>
-<button class="btn info">i</button>
-</div>
+<button onclick="event.stopPropagation();play('${p.video}','${p.id}')">▶</button>
+<button onclick="event.stopPropagation();toggle('${p.id}')">${enLista?'✔':'＋'}</button>
+<button onclick="event.stopPropagation();info('${p.id}')">i</button>
 <p>${p.titulo}</p>
 </div>
 `
 
-/* EVENTOS */
-
-div.querySelector(".play").onclick=(e)=>{
-e.stopPropagation()
-reproducir(p.video,p.id)
-}
-
-div.querySelector(".info").onclick=(e)=>{
-e.stopPropagation()
-abrirInfo(p)
-}
-
-div.querySelector(".lista").onclick=(e)=>{
-e.stopPropagation()
-toggleLista(p.id)
-renderTodo()
-}
-
 return div
 }
 
-/* ========================= */
-/* ===== RENDER ===== */
-/* ========================= */
+/* ================= RENDER ================= */
 
-function renderInicio(){
+function render(){
+
 inicio.innerHTML=""
-peliculas.forEach(p=>{
-inicio.appendChild(crearTarjeta(p))
-})
-}
-
-function renderLista(){
-miLista.innerHTML=""
-let lista=JSON.parse(localStorage.getItem("miLista"))||[]
-
-lista.forEach(id=>{
-let peli=peliculas.find(p=>p.id===id)
-if(peli){
-miLista.appendChild(crearTarjeta(peli))
-}
-})
-}
-
-function renderContinuar(){
 continuar.innerHTML=""
+miLista.innerHTML=""
 
-let data=JSON.parse(localStorage.getItem("continuar"))||{}
-
-Object.keys(data).forEach(id=>{
-let peli=peliculas.find(p=>p.id===id)
-if(peli){
-continuar.appendChild(crearTarjeta(peli))
-}
+peliculas.forEach(p=>{
+inicio.appendChild(crear(p))
 })
+
+let lista=JSON.parse(localStorage.getItem("lista"))||[]
+lista.forEach(id=>{
+let p=peliculas.find(x=>x.id==id)
+if(p) miLista.appendChild(crear(p))
+})
+
 }
 
-function renderTodo(){
-renderInicio()
-renderLista()
-renderContinuar()
-}
+/* ================= LISTA ================= */
 
-/* ========================= */
-/* ===== LISTA ===== */
-/* ========================= */
-
-function toggleLista(id){
-
-let lista=JSON.parse(localStorage.getItem("miLista"))||[]
+function toggle(id){
+let lista=JSON.parse(localStorage.getItem("lista"))||[]
 
 if(lista.includes(id)){
-lista=lista.filter(x=>x!==id)
+lista=lista.filter(x=>x!=id)
 }else{
 lista.push(id)
 }
 
-localStorage.setItem("miLista",JSON.stringify(lista))
+localStorage.setItem("lista",JSON.stringify(lista))
+render()
 }
 
-/* ========================= */
-/* ===== VIDEO ===== */
-/* ========================= */
+function toggleListaActual(){
+toggle(actual)
+}
 
-function reproducir(src,id){
+/* ================= VIDEO ================= */
 
-peliActual=id
-
+function play(src,id){
+if(!src) return
+actual=id
 videoPeli.src=src
-reproductor.style.display="flex"
-
-let tiempos=JSON.parse(localStorage.getItem("continuar"))||{}
-
-if(tiempos[id]){
-videoPeli.currentTime=tiempos[id]
+videoModal.style.display="flex"
 }
-
-videoPeli.play().catch(()=>{})
-
-infoModal.style.display="none"
-}
-
-/* GUARDAR TIEMPO */
-
-videoPeli.addEventListener("timeupdate",()=>{
-
-if(!peliActual) return
-
-let data=JSON.parse(localStorage.getItem("continuar"))||{}
-
-data[peliActual]=videoPeli.currentTime
-
-localStorage.setItem("continuar",JSON.stringify(data))
-
-})
 
 function cerrarVideo(){
-reproductor.style.display="none"
+videoModal.style.display="none"
 videoPeli.pause()
 }
 
-/* ========================= */
-/* ===== INFO ===== */
-/* ========================= */
+/* ================= INFO ================= */
 
-function abrirInfo(p){
-peliActual=p.id
+function info(id){
+actual=id
+let p=peliculas.find(x=>x.id==id)
 infoTitulo.textContent=p.titulo
 infoModal.style.display="flex"
 }
@@ -505,39 +452,43 @@ function cerrarInfo(){
 infoModal.style.display="none"
 }
 
-function cerrarInfoClick(e){
-if(e.target.id==="infoModal"){
+function playDesdeInfo(){
+let p=peliculas.find(x=>x.id==actual)
+play(p.video,p.id)
 cerrarInfo()
 }
+
+/* ================= SAGA ================= */
+
+function abrirSaga(){
+sagaContenido.innerHTML=""
+peliculas.forEach(p=>{
+sagaContenido.appendChild(crear(p))
+})
+sagaModal.style.display="flex"
 }
 
-function playDesdeInfo(){
-let peli=peliculas.find(p=>p.id===peliActual)
-if(peli){
-reproducir(peli.video,peli.id)
-}
+function cerrarSaga(){
+sagaModal.style.display="none"
 }
 
-/* ========================= */
-/* ===== NAV ===== */
-/* ========================= */
+/* ================= NAV ================= */
 
 function mostrarInicio(){
 inicio.style.display="flex"
-seccionLista.style.display="none"
+miLista.style.display="none"
+tituloLista.style.display="none"
 }
 
 function mostrarLista(){
-renderLista()
 inicio.style.display="none"
-seccionLista.style.display="block"
+miLista.style.display="flex"
+tituloLista.style.display="block"
 }
 
-/* ========================= */
-/* ===== INIT ===== */
-/* ========================= */
+/* ================= INIT ================= */
 
-renderTodo()
+render()
 
 </script>
 
