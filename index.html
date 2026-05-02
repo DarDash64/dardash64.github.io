@@ -3,79 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Ñotflix</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
 <style>
 
-/* ================= BASE ================= */
+/* ========================= */
+/* ===== RESET / BASE ===== */
+/* ========================= */
+
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:#141414;
 color:white;
 overflow-x:hidden;
 }
 
-/* ================= INTRO ================= */
-#intro{
-position:fixed;
-inset:0;
-background:black;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:10000;
-transition:opacity 0.5s;
-}
+/* ========================= */
+/* ===== NAVBAR ===== */
+/* ========================= */
 
-#intro video{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.skip{
-position:absolute;
-bottom:30px;
-right:30px;
-background:rgba(255,255,255,0.2);
-padding:10px 20px;
-cursor:pointer;
-border-radius:6px;
-}
-
-/* ================= PERFILES ================= */
-#perfiles{
-display:none;
-position:fixed;
-inset:0;
-background:#141414;
-z-index:9000;
-text-align:center;
-padding-top:100px;
-}
-
-.perfil{
-display:inline-block;
-margin:30px;
-cursor:pointer;
-}
-
-.perfil img{
-width:130px;
-border-radius:10px;
-transition:0.3s;
-}
-
-.perfil:hover img{
-transform:scale(1.1) translateY(-10px);
-box-shadow:0 15px 40px black;
-}
-
-/* ================= NAV ================= */
 .navbar{
 position:fixed;
 top:0;
@@ -90,7 +43,7 @@ width:90%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.85);
 padding:15px 30px;
 border-radius:10px;
 }
@@ -99,16 +52,29 @@ border-radius:10px;
 font-family:'Bebas Neue';
 font-size:2.5rem;
 color:#E50914;
+letter-spacing:2px;
 }
 
 .nav-links span{
 margin-left:20px;
 cursor:pointer;
+transition:0.2s;
 }
 
-/* ================= CONTENIDO ================= */
+.nav-links span:hover{
+color:#E50914;
+}
+
+/* ========================= */
+/* ===== CONTENIDO ===== */
+/* ========================= */
+
 .contenido{
 padding:120px 40px;
+}
+
+.seccion{
+margin-bottom:60px;
 }
 
 .catalogo{
@@ -117,20 +83,24 @@ gap:30px;
 flex-wrap:wrap;
 }
 
-/* ================= TARJETAS ================= */
+/* ========================= */
+/* ===== TARJETAS ===== */
+/* ========================= */
+
 .tarjeta{
 width:280px;
 background:#181818;
 border-radius:6px;
 overflow:hidden;
 position:relative;
-transition:0.3s;
+transition:transform 0.3s ease, box-shadow 0.3s;
 cursor:pointer;
 }
 
 .tarjeta:hover{
 transform:scale(1.15);
 z-index:10;
+box-shadow:0 10px 30px rgba(0,0,0,0.8);
 }
 
 .poster{
@@ -145,16 +115,20 @@ height:100%;
 object-fit:cover;
 }
 
+/* PREVIEW */
+
 .preview{
 position:absolute;
 inset:0;
 opacity:0;
-transition:0.3s;
+transition:opacity 0.3s;
 }
 
 .tarjeta:hover .preview{
 opacity:1;
 }
+
+/* HOVER UI */
 
 .hover{
 position:absolute;
@@ -162,7 +136,7 @@ bottom:0;
 width:100%;
 background:linear-gradient(to top,black,transparent);
 opacity:0;
-transition:0.3s;
+transition:opacity 0.3s;
 padding:10px;
 }
 
@@ -173,6 +147,7 @@ opacity:1;
 .botones{
 display:flex;
 gap:10px;
+margin-bottom:5px;
 }
 
 .btn{
@@ -180,20 +155,35 @@ padding:8px;
 border:none;
 border-radius:4px;
 cursor:pointer;
+font-size:14px;
 }
 
-.play{background:white;color:black;}
-.lista{background:rgba(255,255,255,0.2);color:white;}
-.info{background:rgba(255,255,255,0.2);color:white;}
-.en-lista{background:green}
+/* BOTONES */
 
-/* BLOQUEADA */
-.bloqueada{
-opacity:0.5;
-pointer-events:none;
+.play{
+background:white;
+color:black;
 }
 
-/* ================= REPRODUCTOR ================= */
+.lista{
+background:#333;
+color:white;
+}
+
+.info{
+background:#333;
+color:white;
+}
+
+.en-lista{
+background:green !important;
+color:white;
+}
+
+/* ========================= */
+/* ===== REPRODUCTOR ===== */
+/* ========================= */
+
 #reproductor{
 display:none;
 position:fixed;
@@ -207,7 +197,10 @@ z-index:7000;
 #videoPeli{
 width:80%;
 max-width:1000px;
+background:black;
 }
+
+/* CERRAR */
 
 .cerrar{
 position:absolute;
@@ -215,10 +208,14 @@ top:20px;
 right:30px;
 font-size:40px;
 cursor:pointer;
-z-index:9999;
+z-index:99999;
+color:white;
 }
 
-/* ================= INFO ================= */
+/* ========================= */
+/* ===== MODAL INFO ===== */
+/* ========================= */
+
 #infoModal{
 display:none;
 position:fixed;
@@ -233,64 +230,55 @@ align-items:center;
 background:#181818;
 padding:30px;
 border-radius:10px;
-width:500px;
+width:420px;
 text-align:center;
 position:relative;
 }
 
-.menuInfo button{
-margin:10px;
-padding:10px;
-cursor:pointer;
+.infoBox h3{
+margin-top:0;
 }
 
-/* SAGA */
-#saga{
-display:none;
-margin-top:20px;
-gap:20px;
-flex-wrap:wrap;
-justify-content:center;
+/* ========================= */
+/* ===== CONTINUAR ===== */
+/* ========================= */
+
+#continuar:empty::after{
+content:"(Aún no has empezado nada)";
+opacity:0.5;
 }
 
-/* overlay click */
-.overlayClose{
-position:absolute;
-inset:0;
-z-index:-1;
+/* ========================= */
+/* ===== SCROLL ===== */
+/* ========================= */
+
+::-webkit-scrollbar{
+width:8px;
 }
+
+::-webkit-scrollbar-thumb{
+background:#444;
+border-radius:10px;
+}
+
+/* ========================= */
+/* ===== EXTRA ESPACIADO ===== */
+/* ========================= */
+
+/* (líneas extra para estabilidad y legibilidad futura) */
+
+.spacer1{height:1px;}
+.spacer2{height:1px;}
+.spacer3{height:1px;}
+.spacer4{height:1px;}
+.spacer5{height:1px;}
 
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
-<div id="intro">
-<video id="introVideo" muted playsinline preload="auto">
-<source src="https://archive.org/download/notflixintro/%C3%B1otflixintro.mp4">
-</video>
-<div class="skip" onclick="salirIntro()">Saltar</div>
-</div>
-
-<!-- PERFILES -->
-<div id="perfiles">
-<h1>¿Quién está viendo?</h1>
-
-<div class="perfil" onclick="entrarPerfil()">
-<img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg">
-<p>Perfil 1</p>
-</div>
-
-<div class="perfil" onclick="entrarPerfil()">
-<img src="https://archive.org/download/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_202605/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha_thumb.jpg">
-<p>Perfil 2</p>
-</div>
-</div>
-
-<!-- APP -->
-<div id="app" style="display:none">
-
+<!-- NAVBAR -->
 <div class="navbar">
 <div class="nav-inner">
 <div class="logo">ÑOTFLIX</div>
@@ -301,141 +289,156 @@ z-index:-1;
 </div>
 </div>
 
+<!-- CONTENIDO -->
 <div class="contenido">
 
-<h2 id="tituloPeliculas">Películas</h2>
+<div class="seccion">
+<h2>Continuar viendo</h2>
+<div id="continuar" class="catalogo"></div>
+</div>
 
+<div class="seccion">
+<h2>Películas</h2>
 <div id="inicio" class="catalogo"></div>
-
-<h2 id="tituloLista" style="display:none">Mi lista</h2>
-<div id="miLista" class="catalogo" style="display:none"></div>
-
-</div>
 </div>
 
-<!-- VIDEO -->
+<div class="seccion" id="seccionLista" style="display:none;">
+<h2>Mi lista</h2>
+<div id="miLista" class="catalogo"></div>
+</div>
+
+</div>
+
+<!-- REPRODUCTOR -->
 <div id="reproductor">
 <span class="cerrar" onclick="cerrarVideo()">✕</span>
 <video id="videoPeli" controls></video>
 </div>
 
-<!-- INFO -->
+<!-- MODAL INFO -->
 <div id="infoModal" onclick="cerrarInfoClick(event)">
 <div class="infoBox">
-
 <span class="cerrar" onclick="cerrarInfo()">✕</span>
-
-<div id="menuInfo">
+<h3 id="infoTitulo"></h3>
 <button onclick="playDesdeInfo()">▶ Reproducir</button>
-<button onclick="mostrarSaga()">Más de esta saga</button>
-</div>
-
-<div id="saga"></div>
-
 </div>
 </div>
 
 <script>
 
-/* ================= DATA ================= */
+/* ========================= */
+/* ===== DATA ===== */
+/* ========================= */
+
 const peliculas=[
 {
 id:"impostor1",
 titulo:"El_Impostor la película",
 img:"https://archive.org/download/poster_20260428/poster.png",
-video:"https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4",
-preview:"https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4"
-},
-{
-id:"impostor2",
-titulo:"El_Impostor 2 la película",
-img:"https://archive.org/download/poster2_202604/poster2.png",
-bloqueada:true
+video:"https://archive.org/download/el-impostor-la-pelicula/El_Impostor%20la%20pel%C3%ADcula%20FINAL.mp4"
 }
 ]
 
 let peliActual=null
 
-/* ================= INTRO ================= */
-const introVideo=document.getElementById("introVideo")
+/* ========================= */
+/* ===== TARJETAS ===== */
+/* ========================= */
 
-introVideo.addEventListener("canplay",()=>introVideo.play().catch(()=>{}))
-introVideo.addEventListener("ended",salirIntro)
-introVideo.addEventListener("error",salirIntro)
-setTimeout(salirIntro,8000)
-
-function salirIntro(){
-intro.style.opacity="0"
-setTimeout(()=>{
-intro.style.display="none"
-perfiles.style.display="block"
-},500)
-}
-
-/* ================= PERFIL ================= */
-function entrarPerfil(){
-perfiles.style.display="none"
-app.style.display="block"
-renderInicio()
-}
-
-/* ================= TARJETAS ================= */
 function crearTarjeta(p){
-let d=document.createElement("div")
-d.className="tarjeta"
-if(p.bloqueada)d.classList.add("bloqueada")
 
-d.innerHTML=`
+let lista=JSON.parse(localStorage.getItem("miLista"))||[]
+let enLista=lista.includes(p.id)
+
+let div=document.createElement("div")
+div.className="tarjeta"
+
+div.innerHTML=`
 <div class="poster">
 <img src="${p.img}">
-${p.preview?`<video class="preview" muted loop src="${p.preview}"></video>`:""}
 </div>
 
 <div class="hover">
 <div class="botones">
 <button class="btn play">▶</button>
-<button class="btn lista">＋</button>
-<button class="btn info">Más info</button>
+<button class="btn lista ${enLista?'en-lista':''}">
+${enLista?'✔':'＋'}
+</button>
+<button class="btn info">i</button>
 </div>
 <p>${p.titulo}</p>
 </div>
 `
 
-if(!p.bloqueada){
+/* EVENTOS */
 
-d.querySelector(".play").onclick=(e)=>{
+div.querySelector(".play").onclick=(e)=>{
 e.stopPropagation()
-reproducir(p.video)
+reproducir(p.video,p.id)
 }
 
-d.querySelector(".info").onclick=(e)=>{
+div.querySelector(".info").onclick=(e)=>{
 e.stopPropagation()
 abrirInfo(p)
 }
 
-d.querySelector(".lista").onclick=(e)=>{
+div.querySelector(".lista").onclick=(e)=>{
 e.stopPropagation()
 toggleLista(p.id)
+renderTodo()
 }
 
-let v=d.querySelector("video")
-if(v){
-d.onmouseenter=()=>v.play()
-d.onmouseleave=()=>{v.pause();v.currentTime=0}
-}
+return div
 }
 
-return d
-}
+/* ========================= */
+/* ===== RENDER ===== */
+/* ========================= */
 
-/* ================= RENDER ================= */
 function renderInicio(){
 inicio.innerHTML=""
-peliculas.forEach(p=>inicio.appendChild(crearTarjeta(p)))
+peliculas.forEach(p=>{
+inicio.appendChild(crearTarjeta(p))
+})
 }
 
-/* ================= LISTA ================= */
+function renderLista(){
+miLista.innerHTML=""
+let lista=JSON.parse(localStorage.getItem("miLista"))||[]
+
+lista.forEach(id=>{
+let peli=peliculas.find(p=>p.id===id)
+if(peli){
+miLista.appendChild(crearTarjeta(peli))
+}
+})
+}
+
+function renderContinuar(){
+continuar.innerHTML=""
+
+let data=JSON.parse(localStorage.getItem("continuar"))||{}
+
+Object.keys(data).forEach(id=>{
+let peli=peliculas.find(p=>p.id===id)
+if(peli){
+continuar.appendChild(crearTarjeta(peli))
+}
+})
+}
+
+function renderTodo(){
+renderInicio()
+renderLista()
+renderContinuar()
+}
+
+/* ========================= */
+/* ===== LISTA ===== */
+/* ========================= */
+
 function toggleLista(id){
+
 let lista=JSON.parse(localStorage.getItem("miLista"))||[]
 
 if(lista.includes(id)){
@@ -447,51 +450,55 @@ lista.push(id)
 localStorage.setItem("miLista",JSON.stringify(lista))
 }
 
-function renderLista(){
-miLista.innerHTML=""
-let lista=JSON.parse(localStorage.getItem("miLista"))||[]
-lista.forEach(id=>{
-let p=peliculas.find(x=>x.id===id)
-if(p) miLista.appendChild(crearTarjeta(p))
-})
-}
+/* ========================= */
+/* ===== VIDEO ===== */
+/* ========================= */
 
-/* ================= NAV ================= */
-function mostrarInicio(){
-inicio.style.display="flex"
-miLista.style.display="none"
-tituloLista.style.display="none"
-tituloPeliculas.style.display="block"
-}
+function reproducir(src,id){
 
-function mostrarLista(){
-renderLista()
-inicio.style.display="none"
-miLista.style.display="flex"
-tituloLista.style.display="block"
-tituloPeliculas.style.display="none"
-}
+peliActual=id
 
-/* ================= VIDEO ================= */
-function reproducir(src){
-infoModal.style.display="none"
 videoPeli.src=src
 reproductor.style.display="flex"
+
+let tiempos=JSON.parse(localStorage.getItem("continuar"))||{}
+
+if(tiempos[id]){
+videoPeli.currentTime=tiempos[id]
+}
+
 videoPeli.play().catch(()=>{})
+
+infoModal.style.display="none"
 }
 
-function playDesdeInfo(){
-if(peliActual){
-reproducir(peliActual.video)
-}
+/* GUARDAR TIEMPO */
+
+videoPeli.addEventListener("timeupdate",()=>{
+
+if(!peliActual) return
+
+let data=JSON.parse(localStorage.getItem("continuar"))||{}
+
+data[peliActual]=videoPeli.currentTime
+
+localStorage.setItem("continuar",JSON.stringify(data))
+
+})
+
+function cerrarVideo(){
+reproductor.style.display="none"
+videoPeli.pause()
 }
 
-/* ================= INFO ================= */
+/* ========================= */
+/* ===== INFO ===== */
+/* ========================= */
+
 function abrirInfo(p){
-peliActual=p
+peliActual=p.id
+infoTitulo.textContent=p.titulo
 infoModal.style.display="flex"
-menuInfo.style.display="block"
-saga.style.display="none"
 }
 
 function cerrarInfo(){
@@ -504,21 +511,33 @@ cerrarInfo()
 }
 }
 
-function mostrarSaga(){
-menuInfo.style.display="none"
-saga.style.display="flex"
-saga.innerHTML=""
-
-peliculas.forEach(p=>{
-saga.appendChild(crearTarjeta(p))
-})
+function playDesdeInfo(){
+let peli=peliculas.find(p=>p.id===peliActual)
+if(peli){
+reproducir(peli.video,peli.id)
+}
 }
 
-/* ================= VIDEO CLOSE ================= */
-function cerrarVideo(){
-reproductor.style.display="none"
-videoPeli.pause()
+/* ========================= */
+/* ===== NAV ===== */
+/* ========================= */
+
+function mostrarInicio(){
+inicio.style.display="flex"
+seccionLista.style.display="none"
 }
+
+function mostrarLista(){
+renderLista()
+inicio.style.display="none"
+seccionLista.style.display="block"
+}
+
+/* ========================= */
+/* ===== INIT ===== */
+/* ========================= */
+
+renderTodo()
 
 </script>
 
